@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.w {
+    margin: 0 100px;
+}
+
+.navbtn .move {
+    margin-right: 100px!important;
+    margin-left: 0!important;
+}
+.navbar,.open>a{
+    background-color: #a262ad!important;
+}
+.navbtn .blackC {
+    color: black!important;
+}
+.navbtn .navbar-brand,.navbar-nav>li>a {
+    padding: 0 40px;
+    margin: 0 20px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: 500;
+}
+.navbtn a {
+    color: white!important;
+}
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.glyphicon-bell {
+    font-size: 25px;
+    transform: translateY(50%);
+    margin-right: 5px;
+    color: black;
+}

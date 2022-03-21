@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.gblog.mapper.UserMapper">
+    <!--
+        id INT PRIMARY KEY AUTO_INCREMENT COMMENT "主键id",
+        username VARCHAR(20) NOT NULL COMMENT "用户名",
+        email VARCHAR(20) NOT NULL COMMENT "邮箱",
+        PASSWORD VARCHAR(255) NOT NULL COMMENT "密码",
+        SIGN VARCHAR(255) DEFAULT "这个人很懒，什么都没写" COMMENT "个性签名",
+        birthday DATETIME   DEFAULT "2000-01-01" COMMENT '生日',
+        created DATETIME   NOT NULL COMMENT '创建日期',
+        modified DATETIME   NULL COMMENT '最后修改时间',
+        qqnum  VARCHAR(20) DEFAULT "未设置",
+        STATUS INT DEFAULT '0'
+    -->
+    <insert id="register" parameterType="com.example.gblog.vo.RegisterVo">
+        insert into x_user(username,email,password,created,modified) values (#{username},#{email},#{password},now(),now())
+    </insert>
+    <select id="getUserByUsernameAndPassword" resultType="com.example.gblog.bean.User">
+        select * from ;
+    </select>
+</mapper>
