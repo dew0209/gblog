@@ -13,10 +13,33 @@
         qqnum  VARCHAR(20) DEFAULT "未设置",
         STATUS INT DEFAULT '0'
     -->
+    <!-- bean映射类 -->
+    <resultMap id="BaseResultMap" type="com.example.gblog.vo.RegisterVo">
+        <id property="id" column="id" />
+        <result property="avatar" column="avatar" />
+        <result property="gender" column="gender" />
+        <result property="username" column="username" />
+        <result property="email" column="email" />
+        <result property="sign" column="sign" />
+        <result property="birthday" column="birthday" />
+        <result property="created" column="created" />
+        <result property="modified" column="modified" />
+        <result property="status" column="status" />
+    </resultMap>
+    <!-- vo映射类 -->
+    <resultMap id="BaseResultMapVo" type="com.example.gblog.vo.RegisterVo" extends="BaseResultMap">
+        <result property="password" column="password" />
+    </resultMap>
+    <!-- 注册用户 -->
     <insert id="register" parameterType="com.example.gblog.vo.RegisterVo">
         insert into x_user(username,email,password,created,modified) values (#{username},#{email},#{password},now(),now())
     </insert>
-    <select id="getUserByUsernameAndPassword" resultType="com.example.gblog.bean.User">
-        select * from ;
+    <!-- 获取用户信息 -->
+    <select id="getUserByUsernameAndPassword" resultMap="BaseResultMapVo">
+        select * from x_user where email = #{email};
     </select>
+    <!-- 更新用户的登录状态 -->
+    <update id="updateStatus">
+        update x_user set status = #{code} where email = #{email}
+    </update>
 </mapper>

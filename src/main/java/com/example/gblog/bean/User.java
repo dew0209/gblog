@@ -33,6 +33,15 @@ public class User {
     private String avatar;
     //生日
     private Date birthday;
+    //创建时间
+    private Date created;
+    //最后一次修改时间
+    private Date modified;
+    //qq号
+    private String qqNum;
+    //登录状态
+    private Integer status;
+
 
 
 }

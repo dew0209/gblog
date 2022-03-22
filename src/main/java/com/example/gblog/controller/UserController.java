@@ -51,7 +51,7 @@ public class UserController {
     public Result register(RegisterVo registerUser,String verify){
         //检查数据的合法性
         String password = registerUser.getPassword();
-        registerUser.setPassword(password);
+        registerUser.setPassword(SecureUtil.md5(password));
         System.out.println(registerUser);
         System.out.println(registerUser.getUsername());
         userService.register(registerUser);
@@ -88,5 +88,10 @@ public class UserController {
         }
 
         return Result.success().action("/");
+    }
+    @RequestMapping("/logout")
+    public String logout(){
+        SecurityUtils.getSubject().logout();
+        return "/";
     }
 }

@@ -44,11 +44,12 @@ $(function () {
             type:"post",
             data:params,
             success:function (d) {
-
+                login.click();
             },
             dataType:"json"
         })
     })
+    /* 发送邮件 */
     $("#sendCode").click(function () {
         var url = "/user/verify"
         var params ={
@@ -60,6 +61,27 @@ $(function () {
             data:params,
             success:function (d) {
                 console.log(d.msg);
+            },
+            dataType:"json"
+        })
+    })
+    //登录发送ajax请求
+    $("#gblog-login").click(function () {
+        /* 请求后端的路径 */
+        var url = "/user/login";
+        //获得各项参数
+        //val()获得输入字段的值
+        var params ={
+            email:$("#login-email").val() + "",
+            password:$("#login-password").val() + "",
+        }
+        $.ajax({
+            url:url,
+            type:"post",
+            data:params,
+            success:function (d) {
+                //window.location=d.action;
+                location.reload();
             },
             dataType:"json"
         })

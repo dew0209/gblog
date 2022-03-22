@@ -44,26 +44,30 @@
                     </ul>
     
                     <!-- 未登录 -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" id="link">登录</a></li>
-                    </ul>
+                    <@shiro.guest>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#" id="link">登录</a></li>
+                        </ul>
+                    </@shiro.guest>
                     <!-- 已经登录 消息提醒的字体图标+个人中心 -->
-                    <#--<ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
-                                <img src="images/xue.png" alt="" class="avatar"> godX <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" class="blackC">我的空间</a></li>
-                                <li><a href="#" class="blackC">个人信息</a></li>
-                                <!-- divider会出现分割线 &ndash;&gt;
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#" class="blackC">我的订单</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#" class="blackC">退出</a></li>
-                            </ul>
-                        </li>
-                    </ul>-->
+                    <@shiro.user>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+                                    <img src="<@shiro.principal property="avatar"/>" alt="" class="avatar"> <@shiro.principal property="username"/> <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/user/<@shiro.principal property="id"/>" class="blackC">我的空间</a></li>
+                                    <li><a href="/info/<@shiro.principal property="id"/>" class="blackC">个人信息</a></li>
+                                    <!-- divider会出现分割线 -->
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/order/<@shiro.principal property="id"/>" class="blackC">我的订单</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/user/logout" class="blackC">退出</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </@shiro.user>
                     <form class="navbar-form navbar-right move">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="搜索您想要的">
@@ -92,9 +96,9 @@
                     <!-- 登录 -->
                     <div class="login-box">
                         <h1>login</h1>
-                        <input type="text" placeholder="用户名">
-                        <input type="password" placeholder="密码">
-                        <button>登录</button>
+                        <input type="text" placeholder="邮箱" name="email" id="login-email">
+                        <input type="password" placeholder="密码" name="password" id="login-password">
+                        <button id="gblog-login">登录</button>
                     </div>
                 </div>
 
