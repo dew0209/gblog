@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.gblog.mapper.PostMapper">
+    <resultMap id="baseResultMap" type="com.example.gblog.bean.Post">
+        <id property="id" column="id"  />
+        <result property="title" column="title" />
+        <result property="keywords1" column="keywords1" />
+        <result property="keywords2" column="keywords2" />
+        <result property="keywords3" column="keywords3" />
+        <result property="price" column="price" />
+        <result property="content" column="content" />
+        <result property="created" column="created" />
+        <result property="lastmd" column="lastmd" />
+        <result property="viewCount" column="view_count" />
+        <result property="reviewCount" column="review_count" />
+        <result property="collectCount" column="collect_count" />
+        <result property="introduce" column="introduce" />
+    </resultMap>
+    <select id="getPost" resultMap="baseResultMap">
+        select * from x_post limit #{st},#{size}
+    </select>
+</mapper>
