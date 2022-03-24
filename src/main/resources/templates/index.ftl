@@ -8,17 +8,17 @@
                 <div class="table-fa blog-1">
                     <table class="table" style="background-color: white">
                         <tr>
-                            <td class="styleShow">${post.id}</td>
+                            <td class="styleShow show-1">${post.type.typeName}</td>
                             <td></td>
-                            <td style="text-align: right" class="styleShow"><a href="">${post.title}</a></td>
+                            <td style="text-align: right" class="styleShow"><a href="" class="show-2">${post.title}</a></td>
                         </tr>
                         <tr>
-                            <td><a href=""><img class="avatar" src="/images/xue.png" alt=""></a></td>
+                            <td><a href=""><img class="avatar show-3" src="${post.user.avatar}" alt=""> <span class="show-7">${post.user.username}</span></a></td>
                             <td></td>
-                            <td style="font-size: 20px;text-align: right">${post.id}</td>
+                            <td style="font-size: 20px;text-align: right" class="show-4">${post.created?string('MM/dd/yyyy, HH:mm:ss')}</td>
                         </tr>
                         <tr>
-                            <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" >${post.content}</textarea> </div></td>
+                            <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" class="show-5">${post.content}</textarea> </div></td>
                         </tr>
                         <tr>
                             <td style="text-align: center"><a href=""><span class="glyphicon glyphicon-heart-empty"></span></a></td>
@@ -60,44 +60,67 @@
                 });
             }
             renderMd();
+            var pn = 2;
+            var pnSize = 2;
+
             window.addEventListener('scroll',function (e) {
                 var scrollTop = $(this).scrollTop();
                 var scrollHeight = $(document).height();
                 var windowHeight = $(this).height();
                 if(scrollTop + windowHeight == scrollHeight){
-                    alert("已经到最底部了！");
-                    var md = "<div id=\"layout\" class=\"container\">\n" +
-                        "                <div class=\"table-fa blog-1\">\n" +
-                        "                    <table class=\"table\" style=\"background-color: white\">\n" +
-                        "                        <tr>\n" +
-                        "                            <td class=\"styleShow\">嘻嘻嘻</td>\n" +
-                        "                            <td></td>\n" +
-                        "                            <td style=\"text-align: right\" class=\"styleShow\"><a href=\"\"></a></td>\n" +
-                        "                        </tr>\n" +
-                        "                        <tr>\n" +
-                        "                            <td><a href=\"\"><img class=\"avatar\" src=\"/images/xue.png\" alt=\"\"></a></td>\n" +
-                        "                            <td></td>\n" +
-                        "                            <td style=\"font-size: 20px;text-align: right\">事实上</td>\n" +
-                        "                        </tr>\n" +
-                        "                        <tr>\n" +
-                        "                            <td colspan=\"3\"><div id=\"editormd-view-100\" class=\"div-blog\"><textarea style=\"\" >`嘿嘿`</textarea> </div></td>\n" +
-                        "                        </tr>\n" +
-                        "                        <tr>\n" +
-                        "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon-heart-empty\"></span></a></td>\n" +
-                        "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon-comment\"></span></a></td>\n" +
-                        "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon glyphicon-star-empty\"></span></a></td>\n" +
-                        "                        </tr>\n" +
-                        "                    </table>\n" +
-                        "                </div>\n" +
-                        "            </div>";
-
-                    $("#content-blog").append(md);
-                    renderMd();
+                    var params = {
+                        pn:pn++,
+                        pnSize:pnSize
+                    };
+                    $.ajax({
+                        url:"/get/more",
+                        type:"post",
+                        data:params,
+                        success:function (d) {
+                            /* 将数据回显上去 */
+                            var listMd = d.data;
+                            console.log(listMd)
+                            $(listMd).each(function (index,value) {
+                                var md = "<div id=\"layout\" class=\"container\">\n" +
+                                    "                <div class=\"table-fa blog-1\">\n" +
+                                    "                    <table class=\"table\" style=\"background-color: white\">\n" +
+                                    "                        <tr>\n" +
+                                    "                            <td class=\"styleShow show-1\"></td>\n" +
+                                    "                            <td></td>\n" +
+                                    "                            <td style=\"text-align: right\" class=\"styleShow\"><a href=\"\" class=\"show-2\">{}</a></td>\n" +
+                                    "                        </tr>\n" +
+                                    "                        <tr>\n" +
+                                    "                            <td><a href=\"\"><img class=\"avatar show-3\" src=\"{post.user.avatar}\" alt=\"\"><span class=\"show-7\"></span></a></td>\n" +
+                                    "                            <td></td>\n" +
+                                    "                            <td style=\"font-size: 20px;text-align: right\" class=\"show-4\">{}</td>\n" +
+                                    "                        </tr>\n" +
+                                    "                        <tr>\n" +
+                                    "                            <td colspan=\"3\"><div id=\"\" class=\"div-blog show-6\"><textarea style=\"\" class=\"show-5\">{}</textarea> </div></td>\n" +
+                                    "                        </tr>\n" +
+                                    "                        <tr>\n" +
+                                    "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon-heart-empty\"></span></a></td>\n" +
+                                    "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon-comment\"></span></a></td>\n" +
+                                    "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon glyphicon-star-empty\"></span></a></td>\n" +
+                                    "                        </tr>\n" +
+                                    "                    </table>\n" +
+                                    "                </div>\n" +
+                                    "            </div>";
+                                $("#content-blog").append(md);
+                                var latL = $("#content-blog").children(":last-child");
+                                latL.find(".show-1").html(value.type.typeName);
+                                latL.find(".show-2").html(value.title);
+                                latL.find(".show-3").attr("src",value.user.avatar);
+                                latL.find(".show-7").text(value.user.username);
+                                latL.find(".show-4").html(new Date(value.created).toLocaleString("en-US", {hour12: false}));
+                                latL.find(".show-5").html(value.content);
+                                latL.find(".show-6").attr("id","editormd-view" + value.id);
+                            });
+                            renderMd();
+                        },
+                        dataType:"json"
+                    });
                 }
             })
-            function getMd() {
-
-            }
         });
     </script>
 </@nav>

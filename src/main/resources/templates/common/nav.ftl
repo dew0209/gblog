@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/nav.css">
         <link rel="stylesheet" href="/css/loginSection.css">
-        <link rel="stylesheet" href="/editormd/css/style.css" />
+        <link rel="stylesheet" href="/editormd/examples/css/style.css" />
         <link rel="stylesheet" href="/editormd/css/editormd.preview.css" />
         <script src="/js/jquery-3.6.0.min.js"></script>
         <script src="/js/bootstrap.js"></script>

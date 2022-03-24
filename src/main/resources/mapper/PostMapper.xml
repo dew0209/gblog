@@ -15,8 +15,10 @@
         <result property="reviewCount" column="review_count" />
         <result property="collectCount" column="collect_count" />
         <result property="introduce" column="introduce" />
+        <association property="user" column="user_id" select="com.example.gblog.mapper.UserMapper.getById"></association>
+        <association property="type" column="type" select="com.example.gblog.mapper.TypeMapper.getById"></association>
     </resultMap>
     <select id="getPost" resultMap="baseResultMap">
-        select * from x_post limit #{st},#{size}
+        select * from x_post order by created desc limit #{st},#{size}
     </select>
 </mapper>
