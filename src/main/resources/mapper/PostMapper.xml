@@ -21,4 +21,13 @@
     <select id="getPost" resultMap="baseResultMap">
         select * from x_post order by created desc limit #{st},#{size}
     </select>
+    <select id="getPostById" resultMap="baseResultMap">
+        select * from x_post where user_id = #{id} order by created desc limit #{st},#{size}
+    </select>
+    <select id="getTotalByStatus" resultType="java.lang.Integer">
+        select count(1) from x_post where user_id = #{id} and status = #{status};
+    </select>
+    <select id="getByStatusAndId" resultMap="baseResultMap">
+        select * from x_post where user_id = #{id} and status = #{status} order by created limit #{st},#{size};
+    </select>
 </mapper>

@@ -16,7 +16,7 @@ public class IndexController {
     @Autowired
     PostService postService;
 
-    @RequestMapping({"/"})
+    @RequestMapping({"/","/index"})
     public String index(HttpServletRequest req){
         //获取第一页的数据，显示上去
         int pn = 1;

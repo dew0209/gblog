@@ -10,7 +10,8 @@
                         <tr>
                             <td class="styleShow show-1">${post.type.typeName}</td>
                             <td></td>
-                            <td style="text-align: right" class="styleShow"><a href="" class="show-2">${post.title}</a></td>
+                            <td style="text-align: right" class="styleShow"><a href="" class="show-2">${post.title}</a></td>+
+
                         </tr>
                         <tr>
                             <td><a href=""><img class="avatar show-3" src="${post.user.avatar}" alt=""> <span class="show-7">${post.user.username}</span></a></td>
@@ -38,7 +39,7 @@
     <script src="/editormd/lib/sequence-diagram.min.js"></script>
     <script src="/editormd/lib/flowchart.min.js"></script>
     <script src="/editormd/lib/jquery.flowchart.min.js"></script>
-    <script src="/editormd//editormd.js"></script>
+    <script src="/editormd/editormd.js"></script>
     <script type="text/javascript">
         $(function() {
             function renderMd() {

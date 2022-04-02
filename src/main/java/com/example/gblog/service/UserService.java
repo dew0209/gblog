@@ -7,4 +7,8 @@ public interface UserService {
     public Integer register(RegisterVo user);
 
     User login(String email, String password);
+
+    boolean hasEmail(String email);
+
+    User getById(Integer id);
 }

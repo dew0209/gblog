@@ -1,10 +1,15 @@
 .w {
-    margin: 0 300px;
+    margin: 0 200px;
 }
 body {
     background: #f3e7e9;
 }
-
+#error-message {
+    color: red;
+}
+#login-error--message {
+    color: red;
+}
 .navbtn .move {
     margin-right: 100px!important;
     margin-left: 0!important;

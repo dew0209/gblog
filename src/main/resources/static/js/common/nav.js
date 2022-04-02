@@ -37,13 +37,19 @@ $(function () {
             username:$("#username").val() + "",
             email:$("#email").val() + "",
             password:$("#password").val() + "",
-            passwordAgain:$("#passwordAgain").val() + ""
+            passwordAgain:$("#passwordAgain").val() + "",
+            verify:$("#verify").val()+""
         }
         $.ajax({
             url:url,
             type:"post",
             data:params,
             success:function (d) {
+                $("#error-message").html("");
+                if (d.status == -1){
+                    $("#error-message").html(d.msg);
+                    return;
+                }
                 login.click();
             },
             dataType:"json"
@@ -55,15 +61,39 @@ $(function () {
         var params ={
             email:$("#email").val() + ""
         }
+        var time;
+        var timer;
         $.ajax({
             url:url,
             type:"get",
             data:params,
             success:function (d) {
-                console.log(d.msg);
+                $("#error-message").html("");
+                //发送成功则设置倒计时，失败则提示失败信息
+                /* 失败 */
+                if(d.status == -1){
+                    //回显提示信息
+                    $("#error-message").html(d.msg);
+                    return;
+                }
+                /* 设置倒计时 按钮不可用 */
+                $("#sendCode").html("60s");
+                $("#sendCode").attr("disabled","disabled");
+                time = 60;
+                timer = setInterval(fn,1000);
+                //开启定时器
             },
             dataType:"json"
-        })
+        });
+        function fn() {
+            if (time <= 0){
+                $("#sendCode").html("验证");
+                $("#sendCode").removeAttr("disabled");
+                clearInterval(timer);
+                return;
+            }
+            $("#sendCode").html(--time + "s");
+        }
     })
     //登录发送ajax请求
     $("#gblog-login").click(function () {
@@ -80,7 +110,11 @@ $(function () {
             type:"post",
             data:params,
             success:function (d) {
-                //window.location=d.action;
+                $("#login-error--message").html("");
+                if(d.status == -1){
+                    $("#login-error--message").html(d.msg);
+                    return;
+                }
                 location.reload();
             },
             dataType:"json"

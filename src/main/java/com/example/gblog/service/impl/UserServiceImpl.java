@@ -35,4 +35,15 @@ public class UserServiceImpl implements UserService {
         userMapper.updateStatus(email,1);
         return res;
     }
+
+    @Override
+    public boolean hasEmail(String email) {
+        int count = userMapper.hasEmail(email);
+        return count == 1;
+    }
+
+    @Override
+    public User getById(Integer id) {
+        return userMapper.getById(id);
+    }
 }

@@ -17,4 +17,25 @@ public class PostServiceImpl implements PostService {
         res.setList(postMapper.getPost((pn - 1) * pnSize,pnSize));
         return res;
     }
+
+    @Override
+    public PageVo<Post> getPostById(int pn, int pnSize, Integer id) {
+        PageVo<Post> res = new PageVo<>();
+        res.setList(postMapper.getPostById((pn - 1) * pnSize,pnSize,id));
+        return res;
+    }
+
+    @Override
+    public PageVo<Post> getPostByIdAnStaus(Integer pn, Integer pnSize, Integer id) {
+        PageVo<Post> res = new PageVo<>();
+        res.setTotalCount(getTotalByStatus(id,0));
+        res.setPageSize(pnSize);
+        res.setCurrPage(pn);
+        res.setList(postMapper.getByStatusAndId(id,0,(pn - 1) * pnSize,pnSize));
+        return res;
+    }
+
+    private int getTotalByStatus(Integer id,Integer status) {
+        return postMapper.getTotalByStatus(id,status);
+    }
 }

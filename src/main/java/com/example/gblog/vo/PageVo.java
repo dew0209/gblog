@@ -1,6 +1,9 @@
 package com.example.gblog.vo;
 
+import lombok.Data;
+
 import java.util.List;
+
 
 public class PageVo<T> {
     private List<T> list;//当前页内容	 	查询

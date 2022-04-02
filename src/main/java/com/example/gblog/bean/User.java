@@ -42,6 +42,4 @@ public class User {
     //登录状态
     private Integer status;
 
-
-
 }

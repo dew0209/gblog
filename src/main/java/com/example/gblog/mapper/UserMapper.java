@@ -14,4 +14,6 @@ public interface UserMapper {
     RegisterVo getUserByUsernameAndPassword(@Param("email") String email);
     User getById(@Param("id") Integer id);
     void updateStatus(@Param("email") String email,@Param("code") Integer code);
+
+    int hasEmail(@Param("email") String email);
 }

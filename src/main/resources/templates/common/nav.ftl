@@ -93,6 +93,9 @@
                         <div id="sendEmailCode">
                             <input type="text" placeholder="验证码" name="verify" id="verify"><button id="sendCode">验证</button>
                         </div>
+                        <div>
+                            <span id="error-message"></span>
+                        </div>
                         <button id="gblog-register">注册</button>
                     </div>
                     <!-- 登录 -->
@@ -100,6 +103,9 @@
                         <h1>login</h1>
                         <input type="text" placeholder="邮箱" name="email" id="login-email">
                         <input type="password" placeholder="密码" name="password" id="login-password">
+                        <div>
+                            <span id="login-error--message"></span>
+                        </div>
                         <button id="gblog-login">登录</button>
                     </div>
                 </div>
