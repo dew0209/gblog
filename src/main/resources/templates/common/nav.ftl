@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="/css/loginSection.css">
         <link rel="stylesheet" href="/editormd/examples/css/style.css" />
         <link rel="stylesheet" href="/editormd/css/editormd.preview.css" />
+        <link rel="stylesheet" href="/editormd/css/editormd.css" />
         <script src="/js/jquery-3.6.0.min.js"></script>
         <script src="/js/bootstrap.js"></script>
         <script src="/js/common/nav.js"></script>
@@ -26,17 +27,17 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">离客</a>
+                    <a class="navbar-brand" href="/index">离客</a>
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <!-- active表示当前的链接已经被选中了 -->
-                        <li class=""><a href="#">首页 <span class="sr-only">(current)</span></a></li>
+                        <li class=""><a href="/index">首页 <span class="sr-only">(current)</span></a></li>
                         <li><a href="#">题库</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">文章<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#" class="blackC">博客</a></li>
+                                <li><a href="/post/1" class="blackC">博客</a></li>
                                 <!-- divider会出现分割线 -->
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#" class="blackC">付费</a></li>

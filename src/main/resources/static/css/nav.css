@@ -1,8 +1,8 @@
 .w {
     margin: 0 200px;
 }
-body {
-    background: #f3e7e9;
+body{
+    background-color: #E6E6FA!important;
 }
 #error-message {
     color: red;

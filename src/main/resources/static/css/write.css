@@ -1,0 +1,26 @@
+#layout {
+    width: 100% !important;
+    height: 520px!important;
+    background-color: white!important;
+    box-shadow: 0 0 10px lightgray;
+}
+.editor-self {
+    width: 100%;
+    height: 50px;
+    background-color: white;
+}
+.editor-sec {
+    margin: 5px 200px!important;
+}
+.editor-self div{
+    float: left;
+    text-align: center;
+}
+.editor-self .form-group {
+    margin: 4px;
+    width: 48%;
+}
+.btn-info {
+    background: #5bc0de!important;
+    border-color: #46b8da!important;
+}

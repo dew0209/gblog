@@ -18,6 +18,15 @@
         <association property="user" column="user_id" select="com.example.gblog.mapper.UserMapper.getById"></association>
         <association property="type" column="type" select="com.example.gblog.mapper.TypeMapper.getById"></association>
     </resultMap>
+    <resultMap id="baseResultMap1" type="com.example.gblog.vo.BlogListVo">
+        <result property="postId" column="postId" />
+        <result property="userId" column="userId" />
+        <result property="title" column="title" />
+        <result property="avatar" column="avatar" />
+        <result property="username" column="username" />
+        <result property="created" column="created" />
+        <result property="viewCount" column="viewCount" />
+    </resultMap>
     <select id="getPost" resultMap="baseResultMap">
         select * from x_post order by created desc limit #{st},#{size}
     </select>
@@ -29,5 +38,19 @@
     </select>
     <select id="getByStatusAndId" resultMap="baseResultMap">
         select * from x_post where user_id = #{id} and status = #{status} order by created limit #{st},#{size};
+    </select>
+    <select id="getPostNoPay" resultMap="baseResultMap1">
+        select
+        x_post.id as postId,
+        x_user.id as userId,
+        x_post.title as title,
+        x_user.avatar as avatar,
+        x_user.username as username,
+        x_post.created as created,
+        x_post.view_count as viewCount
+         from x_post left join x_user on x_post.user_id = x_user.id where type = 1 order by created desc limit #{st},#{size};
+    </select>
+    <select id="getTotalNoPay" resultType="java.lang.Integer">
+        select count(1) from x_post where type = 1;
     </select>
 </mapper>

@@ -83,7 +83,7 @@
                         </li>
                         <li class="item-show">
                             <!-- 标题           时间   阅读量  （按时间进行排序）-->
-                            <table class="table table-striped">
+                            <table class="table table-striped table-blog">
                                 <thead>
                                     <tr>
                                         <th scope="row">#</th>
@@ -93,35 +93,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <#-- 展示 -->
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>spring学习笔记四</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>112</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>spring学习笔记四</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>112</td>
-                                </tr>
+                                    <#-- 展示 js数据回显的时候进行展示 -->
                                 </tbody>
                             </table>
                             <div align="right">
                                 <nav aria-label="Page navigation">
-                                    <ul class="pagination" style="margin-right: 5px">
+                                    <ul class="pagination pagination-blog-fa" style="margin-right: 5px">
                                         <li>
                                             <a href="#" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <#--<li class="active"><a href="#" >1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>-->
-                                        <li>
+                                        <li class="blog-pagination">
                                             <a href="#" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>
@@ -436,6 +419,10 @@
         });
         function f1(pn) {
             console.log("博客部分");
+            //清空数据
+            $(".table-blog").find("tbody").children().remove();
+            //请空分页
+            $(".pagination-blog-fa").children(".paging-btn").remove();
             /* 显示和列表 */
             /*
             * <tr>
@@ -457,6 +444,31 @@
                 success:function (d) {
                     //分页等数据都在这里
                     console.log(d);
+                    //回显分页
+                    for(var i = 1;i <= d.data.totalPage;i++){
+                        console.log("处理分页");
+                        var eleStr = "";
+                        if(i == d.data.currPage){
+                            eleStr = "<li class=\"active paging-btn\"><a href=\"JavaScript:f1("+i+")\" >"+i+"</a></li>"
+
+                        }else {
+                            eleStr = "<li class=\"paging-btn\"><a href=\"JavaScript:f1("+i+")\" >"+i+"</a></li>";
+                        }
+                        $(".blog-pagination").before(eleStr);
+                    }
+                    //回显数据
+                    for(var i = 0;i < d.data.list.length;i++){
+                        console.log(d.data.list[i].title);
+                        //创建元素
+                        var eleTr = "<tr>\n" +
+                            "                                        <th scope=\"row\">"+ ((pn - 1)* 10 + (i + 1))+"</th>\n" +
+                            "                                        <td>"+d.data.list[i].title+"</td>\n" +
+                            "                                        <td>"+new Date(d.data.list[i].created).toLocaleString("en-US", {hour12: false})+"</td>\n" +
+                            "                                        <td>"+d.data.list[i].viewCount+"</td>\n" +
+                            "                                    </tr>"
+                        $(".table-blog").find("tbody").append(eleTr);
+                    }
+
                 },
                 dataType:"json"
             });

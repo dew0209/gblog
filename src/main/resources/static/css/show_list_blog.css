@@ -1,0 +1,32 @@
+
+.body-show-blog {
+    background-color:white;
+
+    margin: 5px 400px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px lightgray;
+}
+.body-part-1 {
+    font-weight: 700;
+    font-size: 50px;
+    padding-top: 20px;
+    font-family: brush script mt,cursive;
+}
+.body-part-2 {
+    display: inline-block;
+    width: 40%;
+    margin: 5px auto;
+}
+.body-part-3 {
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    margin-left: 10px;
+}
+.body-show-blog .btn-info{
+    background: #5bc0de!important;
+    border-color: #46b8da!important;
+}
+.body-part-4 {
+    text-align: left;
+}

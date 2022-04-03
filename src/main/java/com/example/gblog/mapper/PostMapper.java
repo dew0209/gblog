@@ -1,6 +1,7 @@
 package com.example.gblog.mapper;
 
 import com.example.gblog.bean.Post;
+import com.example.gblog.vo.BlogListVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -16,4 +17,9 @@ public interface PostMapper {
     int getTotalByStatus(@Param("id") Integer id,@Param("status") Integer status);
 
     List<Post> getByStatusAndId(@Param("id") Integer id,@Param("status") int i,@Param("st") int i1,@Param("size") Integer pnSize);
+
+    List<BlogListVo> getPostNoPay(@Param("st") int i, @Param("size") Integer size);
+
+    int getTotalNoPay();
+
 }
