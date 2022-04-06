@@ -39,6 +39,24 @@
                 console.log($(".text-md-my").html());
                 console.log($("#title").val());
                 console.log($("#category").val());
+                /* 请求后端的路径 */
+                var url = "/post/add";
+                //获得各项参数
+                //val()获得输入字段的值
+                var params ={
+                    title:$("#title").val(),
+                    content:$(".text-md-my").html(),
+                    keywords:$("#category").val()
+                }
+                $.ajax({
+                    url:url,
+                    type:"post",
+                    data:params,
+                    success:function (d) {
+                        alert(d.msg);
+                    },
+                    dataType:"json"
+                })
             });
         })
     </script>

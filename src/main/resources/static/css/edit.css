@@ -1,0 +1,79 @@
+.editormd-html-preview {
+    width: 100%;
+    height: auto;
+    margin-right: 200px!important;
+}
+body {
+    background-color: #f3e7e9;
+}
+#layout {
+    margin: 10px!important;
+    padding: 10px!important;
+}
+
+
+li {
+    list-style: none;
+}
+/* 展示区域 */
+/* 导航条 */
+.mess-people {
+    position: relative;
+    height: auto;
+    background-color: #fffffc;
+    margin-left: 200px!important;
+    margin-right: 200px!important;
+    box-shadow: 0 0 10px lightgray;
+}
+.pe-blog {
+    margin-top: 30px;
+}
+.item-show {
+    display: none;
+}
+th {
+    text-align: center;
+}
+.item-show .table {
+    box-shadow: none;
+}
+.love {
+    position: absolute;
+    top:0;
+    left:-30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: white;
+    box-shadow: 0 0 30px lightgray;
+}
+.collection {
+    position: absolute;
+    top:30px;
+    left:-30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: white;
+    box-shadow: 0 0 30px lightgray;
+}
+.fa-comment-sub {
+    background-color: white;
+    margin-left: 200px!important;
+    margin-right: 200px!important;
+}
+.comment-sum {
+    font-weight: 700;
+    font-size: 20px;
+}
+.btn-info {
+    background: #5bc0de!important;
+    border-color: #46b8da!important;
+}
+.row {
+    text-align: left;
+    margin-left: 5px;
+    margin-right: 5px;
+}

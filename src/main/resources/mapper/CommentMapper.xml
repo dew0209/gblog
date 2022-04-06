@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.gblog.mapper.CommentMapper">
+
+    <resultMap id="baserResultMap" type="com.example.gblog.vo.CommentVo">
+        <id column="id" property="id" />
+        <result column="created" property="created" />
+        <result column="user_id" property="userId" />
+        <result column="username" property="userName" />
+        <result column="comment" property="comment" />
+        <result column="avatar" property="avatar"/>
+        <result column="re_user_id" property="reId" />
+        <result column="reName" property="reName" />
+    </resultMap>
+
+    <insert id="addComment">
+        insert into x_comment(post_id,user_id,created,comment)
+                values(#{postId},#{userId},now(),#{review});
+    </insert>
+    <insert id="addRe">
+        insert into x_comment(user_id,post_id,replay_id,re_user_id,comment) values(#{userId},#{postId},#{replayId},#{reId},#{comment});
+    </insert>
+    <select id="getComment" resultMap="baserResultMap">
+        select * from x_comment
+        left join x_user on x_comment.user_id = x_user.id
+        where x_comment.post_id = #{id} and x_comment.status = 0 and replay_id is null;
+    </select>
+    <select id="getReComment" resultMap="baserResultMap">
+        select
+             x_comment.id,
+             x_comment.user_id,
+             x_comment.created,
+             x_user.username,
+             x_comment.comment,
+             x_user.avatar,
+             re_user_id,
+             a.username AS 'reName'
+        from x_comment
+        left join x_user on x_comment.user_id = x_user.id
+        LEFT JOIN x_user AS a ON a.id = re_user_id
+        where x_comment.replay_id = #{replayId} and x_comment.status = 0 and x_comment.post_id = #{id};
+    </select>
+</mapper>

@@ -10,7 +10,7 @@
                         <tr>
                             <td class="styleShow show-1">${post.type.typeName}</td>
                             <td></td>
-                            <td style="text-align: right" class="styleShow"><a href="" class="show-2">${post.title}</a></td>+
+                            <td style="text-align: right" class="styleShow"><a href="" class="show-2">${post.title}</a></td>
 
                         </tr>
                         <tr>

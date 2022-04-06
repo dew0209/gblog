@@ -34,7 +34,7 @@
                     <tr>
                         <td>
                             <#-- 详情页的id显示 -->
-                            <a href="">${item.title}</a>
+                            <a href="/post/blog/${item.postId}">${item.title}</a>
                         </td>
                         <td>
                             <a href="/user/${item.userId}">

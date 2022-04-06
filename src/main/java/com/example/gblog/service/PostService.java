@@ -12,4 +12,8 @@ public interface PostService {
     PageVo<Post> getPostByIdAnStaus(Integer pn, Integer pnSize, Integer id);
 
     PageVo<BlogListVo> getPostNoPay(Integer pn, Integer size);
+
+    void addBlogNoPay(String title, String content, String keywords);
+
+    Post getById(Integer id);
 }

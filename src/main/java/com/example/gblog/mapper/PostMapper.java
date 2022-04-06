@@ -22,4 +22,7 @@ public interface PostMapper {
 
     int getTotalNoPay();
 
+    void addBlogNoPay(@Param("newPost") Post newPost, @Param("type") int i, @Param("userId") Integer id);
+
+    Post getById(@Param("id") Integer id);
 }

@@ -27,6 +27,9 @@
         <result property="created" column="created" />
         <result property="viewCount" column="viewCount" />
     </resultMap>
+    <insert id="addBlogNoPay">
+        insert into x_post values(null,#{newPost.title},#{userId},#{type},#{newPost.keywords1},#{newPost.keywords2},#{newPost.keywords3},#{newPost.price},#{newPost.content},0,now(),now(),0,0,0,null);
+    </insert>
     <select id="getPost" resultMap="baseResultMap">
         select * from x_post order by created desc limit #{st},#{size}
     </select>
@@ -52,5 +55,8 @@
     </select>
     <select id="getTotalNoPay" resultType="java.lang.Integer">
         select count(1) from x_post where type = 1;
+    </select>
+    <select id="getById" resultMap="baseResultMap">
+        select * from x_post where id = #{id};
     </select>
 </mapper>
