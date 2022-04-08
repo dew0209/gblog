@@ -18,8 +18,11 @@
                 values(#{postId},#{userId},now(),#{review});
     </insert>
     <insert id="addRe">
-        insert into x_comment(user_id,post_id,replay_id,re_user_id,comment) values(#{userId},#{postId},#{replayId},#{reId},#{comment});
+        insert into x_comment(user_id,post_id,replay_id,re_user_id,comment,re_id) values(#{userId},#{postId},#{replayId},#{reId},#{comment},#{rId});
     </insert>
+    <update id="changeStatus">
+        update x_comment set status = 1 where id = #{id};
+    </update>
     <select id="getComment" resultMap="baserResultMap">
         select * from x_comment
         left join x_user on x_comment.user_id = x_user.id
@@ -39,5 +42,8 @@
         left join x_user on x_comment.user_id = x_user.id
         LEFT JOIN x_user AS a ON a.id = re_user_id
         where x_comment.replay_id = #{replayId} and x_comment.status = 0 and x_comment.post_id = #{id};
+    </select>
+    <select id="getFloorIds" resultType="java.lang.Integer">
+        select id from x_comment where re_id = #{reId} and status = 0;
     </select>
 </mapper>

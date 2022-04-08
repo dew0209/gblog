@@ -40,7 +40,7 @@
                                 <li><a href="/post/1" class="blackC">博客</a></li>
                                 <!-- divider会出现分割线 -->
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#" class="blackC">付费</a></li>
+                                <li><a href="/yui/1" class="blackC">付费</a></li>
                             </ul>
                         </li>
                         <li><a href="#">合集</a></li>

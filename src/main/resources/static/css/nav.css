@@ -61,3 +61,8 @@ body{
     height: 30px;
     border-radius: 50%;
 }
+.btn-danger {
+    color: #fff;
+    background: #d9534f!important;
+    border-color: #d43f3a!important;
+}

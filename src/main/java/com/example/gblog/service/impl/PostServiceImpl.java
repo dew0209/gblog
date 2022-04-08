@@ -87,6 +87,16 @@ public class PostServiceImpl implements PostService {
         return postMapper.getById(id);
     }
 
+    @Override
+    public void addReviewCount(Integer postId) {
+        postMapper.addReviewCount(postId);
+    }
+
+    @Override
+    public void subReviewCount(Integer postId) {
+        postMapper.subReviewCount(postId);
+    }
+
     private int getTotalNoPay() {
         return postMapper.getTotalNoPay();
     }

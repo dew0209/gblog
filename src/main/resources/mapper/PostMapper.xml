@@ -30,6 +30,12 @@
     <insert id="addBlogNoPay">
         insert into x_post values(null,#{newPost.title},#{userId},#{type},#{newPost.keywords1},#{newPost.keywords2},#{newPost.keywords3},#{newPost.price},#{newPost.content},0,now(),now(),0,0,0,null);
     </insert>
+    <update id="addReviewCount">
+        update x_post set review_count = review_count + 1 where id = #{id};
+    </update>
+    <update id="subReviewCount">
+        update x_post set review_count = review_count - 1 where id = #{id};
+    </update>
     <select id="getPost" resultMap="baseResultMap">
         select * from x_post order by created desc limit #{st},#{size}
     </select>
@@ -51,7 +57,7 @@
         x_user.username as username,
         x_post.created as created,
         x_post.view_count as viewCount
-         from x_post left join x_user on x_post.user_id = x_user.id where type = 1 order by created desc limit #{st},#{size};
+         from x_post left join x_user on x_post.user_id = x_user.id where introduce is null and type = 1 order by created desc limit #{st},#{size};
     </select>
     <select id="getTotalNoPay" resultType="java.lang.Integer">
         select count(1) from x_post where type = 1;

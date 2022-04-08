@@ -9,5 +9,7 @@ public interface CommentService {
 
     List<CommentVo> getComment(Integer id);
 
-    void addRe(Integer id, Integer postId, Integer replayId, Integer userId, String comment);
+    void addRe(Integer id, Integer postId, Integer replayId, Integer userId, String comment,Integer rId);
+
+    void del(Integer id,Integer postId);
 }

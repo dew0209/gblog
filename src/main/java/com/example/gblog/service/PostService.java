@@ -16,4 +16,8 @@ public interface PostService {
     void addBlogNoPay(String title, String content, String keywords);
 
     Post getById(Integer id);
+
+    void addReviewCount(Integer postId);
+
+    void subReviewCount(Integer postId);
 }

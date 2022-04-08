@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.gblog.mapper.PayPostMapper">
+    <resultMap id="baseResultMap" type="com.example.gblog.vo.BlogListVo">
+        <result property="postId" column="postId" />
+        <result property="userId" column="userId" />
+        <result property="title" column="title" />
+        <result property="avatar" column="avatar" />
+        <result property="username" column="username" />
+        <result property="created" column="created" />
+        <result property="viewCount" column="viewCount" />
+    </resultMap>
+    <resultMap id="baseResultMap1" type="com.example.gblog.bean.Post">
+        <id property="id" column="id"  />
+        <result property="title" column="title" />
+        <result property="keywords1" column="keywords1" />
+        <result property="keywords2" column="keywords2" />
+        <result property="keywords3" column="keywords3" />
+        <result property="price" column="price" />
+        <result property="content" column="content" />
+        <result property="created" column="created" />
+        <result property="lastmd" column="lastmd" />
+        <result property="viewCount" column="view_count" />
+        <result property="reviewCount" column="review_count" />
+        <result property="collectCount" column="collect_count" />
+        <result property="introduce" column="introduce" />
+        <association property="user" column="user_id" select="com.example.gblog.mapper.UserMapper.getById"></association>
+        <association property="type" column="type" select="com.example.gblog.mapper.TypeMapper.getById"></association>
+    </resultMap>
+    <select id="getPostPay" resultMap="baseResultMap">
+       select
+        x_post.id as postId,
+        x_user.id as userId,
+        x_post.title as title,
+        x_user.avatar as avatar,
+        x_user.username as username,
+        x_post.created as created,
+        x_post.view_count as viewCount
+         from x_post left join x_user on x_post.user_id = x_user.id where introduce is not null and type = 1 order by created desc limit #{st},#{size};
+    </select>
+    <select id="getTotalPay" resultType="java.lang.Integer">
+        select count(1) from x_post where introduce is not null;
+    </select>
+    <select id="getById" resultMap="baseResultMap1">
+        select * from x_post where id = #{id};
+    </select>
+</mapper>

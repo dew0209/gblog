@@ -17,7 +17,7 @@
                 type:"post",
                 data:params,
                 success:function (d) {
-                    location.href = "/post/blog/${post.id}"
+                    location.href = "/yui/post/blog/${post.id}"
                 },
                 dataType:"json"
             })
@@ -47,7 +47,7 @@
                                                 <td style="font-size: 20px;text-align: right" class="show-4">${post.created?string('MM/dd/yyyy, HH:mm:ss')}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3"><div id="editormd-view-1" class="div-blog"><textarea style="" class="show-5">${post.content}</textarea></div></td>
+                                                <td colspan="3"><div id="editormd-view-1" class="div-blog"><textarea style="" class="show-5">${post.introduce}</textarea></div></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -55,7 +55,15 @@
                             </div>
                         </li>
                     </ul>
+                    <#if post.content??>
 
+                    <#else>
+                        <form action="/yui/pay" method="post">
+                            <input type="hidden" value="${post.price}" name="price">
+                            <input type="hidden" value="${post.id}" name="postId">
+                            <button type="submit" class="btn btn-danger pay-post">${post.price} 元</button>
+                        </form>
+                    </#if>
                 </section>
                 <!-- 点赞，喜欢 -->
                 <span class="love">
@@ -109,7 +117,7 @@
                                                     type:"post",
                                                     data:params,
                                                     success:function (d) {
-                                                        location.href = "/post/blog/${post.id}"
+                                                        location.href = "/yui/post/blog/${post.id}"
                                                     },
                                                     dataType:"json"
                                                 })

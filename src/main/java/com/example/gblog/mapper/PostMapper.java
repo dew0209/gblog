@@ -25,4 +25,8 @@ public interface PostMapper {
     void addBlogNoPay(@Param("newPost") Post newPost, @Param("type") int i, @Param("userId") Integer id);
 
     Post getById(@Param("id") Integer id);
+
+    void addReviewCount(@Param("id") Integer postId);
+
+    void subReviewCount(@Param("id")Integer postId);
 }
