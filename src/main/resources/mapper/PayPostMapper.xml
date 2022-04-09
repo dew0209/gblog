@@ -28,8 +28,8 @@
         <association property="type" column="type" select="com.example.gblog.mapper.TypeMapper.getById"></association>
     </resultMap>
     <insert id="add">
-        insert into x_post(title,user_id,type,keywords1,keywords2,keywords3,price,content,,created,lastmd)
-                        values(#{post.title},#{userId},#{type},#{post.keywords1},#{post.keywords2},#{post.keywords3},#{post.price},#{post.content},now(),now());
+        insert into x_post(title,user_id,type,keywords1,keywords2,keywords3,price,content,created,lastmd,introduce)
+                        values(#{post.title},#{userId},#{type},#{post.keywords1},#{post.keywords2},#{post.keywords3},#{post.price},#{post.content},now(),now(),#{post.introduce});
     </insert>
     <select id="getPostPay" resultMap="baseResultMap">
        select

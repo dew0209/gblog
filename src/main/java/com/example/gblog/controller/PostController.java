@@ -1,12 +1,16 @@
 package com.example.gblog.controller;
 
 import com.example.gblog.bean.Post;
+import com.example.gblog.bean.User;
 import com.example.gblog.common.lang.Result;
+import com.example.gblog.service.CollService;
 import com.example.gblog.service.CommentService;
+import com.example.gblog.service.LoveService;
 import com.example.gblog.service.PostService;
 import com.example.gblog.vo.BlogListVo;
 import com.example.gblog.vo.CommentVo;
 import com.example.gblog.vo.PageVo;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +28,10 @@ public class PostController {
     PostService postService;
     @Autowired
     CommentService commentService;
-
+    @Autowired
+    LoveService loveService;
+    @Autowired
+    CollService collService;
     @GetMapping("/{id}")
     public String index(@PathVariable(value = "id",required = false)Integer pn, HttpServletRequest request){
         if(pn == null)pn = 1;
@@ -54,6 +61,15 @@ public class PostController {
         List<CommentVo> comment = commentService.getComment(id);
         request.setAttribute("post",post);
         request.setAttribute("comment",comment);
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return "show";
+        Integer loveSUm = loveService.getById(id);
+        Integer collSum = collService.getById(id);
+
+        if(loveSUm != 0)
+            request.setAttribute("love",loveSUm);
+        if(collSum != 0)
+            request.setAttribute("coll",collSum);
         return "show";
     }
 }

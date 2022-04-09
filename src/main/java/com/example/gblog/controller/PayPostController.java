@@ -16,9 +16,7 @@ import com.example.gblog.bean.Post;
 import com.example.gblog.bean.User;
 import com.example.gblog.common.lang.Result;
 import com.example.gblog.mapper.PayPostMapper;
-import com.example.gblog.service.CommentService;
-import com.example.gblog.service.OrderService;
-import com.example.gblog.service.PayPostService;
+import com.example.gblog.service.*;
 import com.example.gblog.vo.BlogListVo;
 import com.example.gblog.vo.CommentVo;
 import com.example.gblog.vo.PageVo;
@@ -42,7 +40,10 @@ public class PayPostController {
     CommentService commentService;
     @Autowired
     OrderService orderService;
-
+    @Autowired
+    LoveService loveService;
+    @Autowired
+    CollService collService;
     @ResponseBody
     @PostMapping("/add")
     public Result add(String title,String content,String keywords,Integer price,String introduce){
@@ -64,7 +65,7 @@ public class PayPostController {
         newPost.setReviewCount(0);
         newPost.setCollectCount(0);
         //介绍，只针对付费，非付费设置为null
-        newPost.setIntroduce(content);
+        newPost.setIntroduce(introduce);
         //type=1,userId=profile.getId()
         payPostService.add(newPost);
         return Result.success();
@@ -89,7 +90,12 @@ public class PayPostController {
         //确保登录
         User user = (User)SecurityUtils.getSubject().getSession().getAttribute("profile");
         if(user == null)return "error";
+
+        //该笔交易存在且未完成，不再计入
+        Order res = orderService.getByOrderId(postId);
+        if(res != null)if(res.getStatus() == 1)return "error";
         Post byId = payPostService.getById(postId);
+        if(user.getId() == byId.getUser().getId())return "error";
         if(byId.getPrice() != price)return "error";
         System.out.println(postId +"===" + price);
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipaydev.com/gateway.do","2021000119660061",str,"json","utf-8",str1,"RSA2");
@@ -109,8 +115,6 @@ public class PayPostController {
 
         AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
         if(response.isSuccess()){
-            //该笔交易存在且未完成，不再计入
-            Order res = orderService.getByOrderId(tradeNo);
             //将该笔交易存储到数据库中，状态为未支付状态
             if(res == null){
                 orderService.addPayNo(price,tradeNo,user.getId(),postId);
@@ -129,7 +133,7 @@ public class PayPostController {
         Order order = orderService.getByOutTradeNo(outTradeNo);
         //返回到对应的付费博客页面，进行解锁。
         if (order == null) return "error";
-        return "/yui/post/blog/" + order.getPostId();
+        return "redirect:http://localhost:8080/yui/post/blog/" + order.getPostId();
     }
     @GetMapping("/post/blog/{id}")
     public String detail(@PathVariable("id")Integer id,HttpServletRequest request){
@@ -137,6 +141,14 @@ public class PayPostController {
         List<CommentVo> comment = commentService.getComment(id);
         request.setAttribute("post",post);
         request.setAttribute("comment",comment);
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return "showPay";
+        Integer loveSUm = loveService.getById(id);
+        Integer collSum = collService.getById(id);
+        if(loveSUm != 0)
+            request.setAttribute("love",loveSUm);
+        if(collSum != 0)
+            request.setAttribute("coll",collSum);
         return "showPay";
     }
 }

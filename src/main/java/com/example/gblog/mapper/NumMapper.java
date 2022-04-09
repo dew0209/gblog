@@ -7,4 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface NumMapper {
     Num getNumByUserId(@Param("id") Integer id);
+
+    void add(@Param("userId") Integer id);
 }

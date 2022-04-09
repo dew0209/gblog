@@ -10,7 +10,7 @@ public interface OrderMapper {
 
     void addPayNo(@Param("price") Integer price,@Param("tradeNo") String tradeNo,@Param("userId") Integer id,@Param("postId")Integer postId);
 
-    Order getByOrderId(@Param("orderId") String tradeNo);
+    Order getByOrderId(@Param("postId") Integer postId,@Param("userId")Integer userId);
 
     void addRealPay(@Param("price") String totalAmount,@Param("orderId") String outTradeNo,@Param("realOrderId") String tradeNo);
 

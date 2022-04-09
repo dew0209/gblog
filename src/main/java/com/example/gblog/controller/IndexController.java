@@ -20,7 +20,7 @@ public class IndexController {
     public String index(HttpServletRequest req){
         //获取第一页的数据，显示上去
         int pn = 1;
-        int pnSize = 2;
+        int pnSize = 3;
         PageVo<Post> res = postService.getPost(pn,pnSize);
         req.setAttribute("pages",res);
         return "index";
@@ -32,5 +32,10 @@ public class IndexController {
         PageVo<Post> res = postService.getPost(pn,pnSize);
         //直接返回数据即可
         return Result.success(res.getList());
+    }
+    @RequestMapping("/godx")
+    @ResponseBody
+    public Result godx(){
+        return Result.success();
     }
 }

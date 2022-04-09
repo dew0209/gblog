@@ -73,7 +73,12 @@
                                                 <td style="font-size: 20px;text-align: right" class="show-4">${post.created?string('MM/dd/yyyy, HH:mm:ss')}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" class="show-5">${post.content}</textarea> </div></td>
+                                                <#-- 付费显示介绍，文章显示内容 -->
+                                                <#if post.content??>
+                                                    <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" class="show-5">${post.content}</textarea> </div></td>
+                                                <#else>
+                                                    <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" class="show-5">${post.introduce}</textarea> </div></td>
+                                                </#if>
                                             </tr>
                                         </table>
                                     </div>

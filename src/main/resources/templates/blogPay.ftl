@@ -12,7 +12,7 @@
             <button type="submit" class="btn btn-info body-part-3">搜索</button>
             <div align="right">
                 <!-- 书写博客的按钮 -->
-                <a href="/post/write">
+                <a href="/yui/write">
                     <button type="submit" class="btn btn-info" style="margin-right: 50px;margin-bottom: 10px">写博客&nbsp;<span class="glyphicon glyphicon-pencil"></span></button>
                 </a>
             </div>

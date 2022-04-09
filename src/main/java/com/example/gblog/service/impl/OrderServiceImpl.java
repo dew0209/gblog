@@ -29,8 +29,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getByOrderId(String tradeNo) {
-        return orderMapper.getByOrderId(tradeNo);
+    public Order getByOrderId(Integer postId) {
+        User profile = (User)SecurityUtils.getSubject().getSession().getAttribute("profile");
+        return orderMapper.getByOrderId(postId,profile.getId());
     }
 
     @Override

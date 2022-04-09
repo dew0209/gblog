@@ -14,4 +14,9 @@ public class NumServiceImpl implements NumService {
     public Num getNumByUserId(Integer id) {
         return numMapper.getNumByUserId(id);
     }
+
+    @Override
+    public void add(Integer id) {
+        numMapper.add(id);
+    }
 }

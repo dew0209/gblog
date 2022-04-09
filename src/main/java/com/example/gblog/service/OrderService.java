@@ -8,7 +8,7 @@ public interface OrderService {
 
     void addPayNo(Integer price, String tradeNo, Integer id,Integer postId);
 
-    Order getByOrderId(String tradeNo);
+    Order getByOrderId(Integer postId);
 
     void addRealPay(String totalAmount, String outTradeNo, String tradeNo);
 

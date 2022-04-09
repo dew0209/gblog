@@ -33,7 +33,12 @@ public class PayPostServiceImpl implements PayPostService {
     public Post getById(Integer id) {
         Post byId = payPostMapper.getById(id);
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null){
+            byId.setContent(null);
+            return byId;
+        }
         Order res = orderService.getById(id);
+        if(user.getId() == byId.getUser().getId())return byId;
         if(res == null){
             //没有付费
             byId.setContent(null);

@@ -24,7 +24,7 @@ public class PostServiceImpl implements PostService {
         for (Post post : list) {
             //付费的博客
             if (post.getType().getId() == 2){
-                post.setContent(post.getIntroduce());
+                post.setContent(null);
             }
         }
         return res;
@@ -33,7 +33,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageVo<Post> getPostById(int pn, int pnSize, Integer id) {
         PageVo<Post> res = new PageVo<>();
-        res.setList(postMapper.getPostById((pn - 1) * pnSize,pnSize,id));
+        List<Post> postById = postMapper.getPostById((pn - 1) * pnSize, pnSize, id);
+        for (Post post : postById) {
+            if(post.getType().getId() == 2){
+                post.setContent(null);
+            }
+        }
+        res.setList(postById);
         return res;
     }
 

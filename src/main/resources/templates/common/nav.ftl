@@ -33,7 +33,7 @@
                     <ul class="nav navbar-nav">
                         <!-- active表示当前的链接已经被选中了 -->
                         <li class=""><a href="/index">首页 <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">题库</a></li>
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">文章<span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -43,7 +43,7 @@
                                 <li><a href="/yui/1" class="blackC">付费</a></li>
                             </ul>
                         </li>
-                        <li><a href="#">合集</a></li>
+                        <li><a href="#"></a></li>
                     </ul>
     
                     <!-- 未登录 -->

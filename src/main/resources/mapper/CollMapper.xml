@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.gblog.mapper.CollMapper">
+
+    <insert id="add">
+        insert into x_coll(user_id,post_id) values(#{userId},#{postId});
+    </insert>
+    <delete id="remove">
+        delete from x_coll where user_id = #{userId} and post_id = #{postId};
+    </delete>
+    <select id="getById" resultType="java.lang.Integer">
+        select count(1) from x_coll where user_id = #{userId} and post_id = #{postId};
+    </select>
+</mapper>

@@ -10,8 +10,11 @@
                         <tr>
                             <td class="styleShow show-1">${post.type.typeName}</td>
                             <td></td>
-                            <td style="text-align: right" class="styleShow"><a href="" class="show-2">${post.title}</a></td>
-
+                            <#if post.content??>
+                                <td style="text-align: right" class="styleShow"><a href="/post/blog/${post.id}" class="show-2">${post.title}</a></td>
+                            <#else>
+                                <td style="text-align: right" class="styleShow"><a href="/yui/post/blog/${post.id}" class="show-2">${post.title}</a></td>
+                            </#if>
                         </tr>
                         <tr>
                             <td><a href=""><img class="avatar show-3" src="${post.user.avatar}" alt=""> <span class="show-7">${post.user.username}</span></a></td>
@@ -19,12 +22,15 @@
                             <td style="font-size: 20px;text-align: right" class="show-4">${post.created?string('MM/dd/yyyy, HH:mm:ss')}</td>
                         </tr>
                         <tr>
-                            <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" class="show-5">${post.content}</textarea> </div></td>
+                            <#-- 付费显示介绍，文章显示内容 -->
+                            <#if post.content??>
+                                <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" class="show-5">${post.content}</textarea> </div></td>
+                            <#else>
+                                <td colspan="3"><div id="editormd-view-${post.id}" class="div-blog"><textarea style="" class="show-5">${post.introduce}</textarea> </div></td>
+                            </#if>
                         </tr>
                         <tr>
-                            <td style="text-align: center"><a href=""><span class="glyphicon glyphicon-heart-empty"></span></a></td>
-                            <td style="text-align: center"><a href=""><span class="glyphicon glyphicon-comment"></span></a></td>
-                            <td style="text-align: center"><a href=""><span class="glyphicon glyphicon glyphicon-star-empty"></span></a></td>
+
                         </tr>
                     </table>
                 </div>
@@ -99,9 +105,6 @@
                                     "                            <td colspan=\"3\"><div id=\"\" class=\"div-blog show-6\"><textarea style=\"\" class=\"show-5\">{}</textarea> </div></td>\n" +
                                     "                        </tr>\n" +
                                     "                        <tr>\n" +
-                                    "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon-heart-empty\"></span></a></td>\n" +
-                                    "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon-comment\"></span></a></td>\n" +
-                                    "                            <td style=\"text-align: center\"><a href=\"\"><span class=\"glyphicon glyphicon glyphicon-star-empty\"></span></a></td>\n" +
                                     "                        </tr>\n" +
                                     "                    </table>\n" +
                                     "                </div>\n" +
@@ -110,11 +113,17 @@
                                 var latL = $("#content-blog").children(":last-child");
                                 latL.find(".show-1").html(value.type.typeName);
                                 latL.find(".show-2").html(value.title);
+                                if(value.type.id==2){
+                                    latL.find(".show-2").attr("href","/yui/post/blog/" + value.id);
+                                }else {
+                                    latL.find(".show-2").attr("href","/post/blog/" + value.id);
+                                }
                                 latL.find(".show-3").attr("src",value.user.avatar);
                                 latL.find(".show-7").text(value.user.username);
                                 latL.find(".show-4").html(new Date(value.created).toLocaleString("en-US", {hour12: false}));
                                 latL.find(".show-5").html(value.content);
                                 latL.find(".show-6").attr("id","editormd-view" + value.id);
+
                             });
                             renderMd();
                         },

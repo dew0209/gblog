@@ -30,21 +30,20 @@ public class ShiroConfig {
         ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterFactoryBean();
         filterFactoryBean.setSecurityManager(securityManager);
         // 配置登录的url和登录成功的url
-        filterFactoryBean.setLoginUrl("/user/login");
+        filterFactoryBean.setLoginUrl("/godx");
         filterFactoryBean.setSuccessUrl("/");
         // 配置未授权跳转页面
-        filterFactoryBean.setUnauthorizedUrl("/error");
+        filterFactoryBean.setUnauthorizedUrl("/godx");
 
         Map<String, String> hashMap = new LinkedHashMap<>();
 
-        /*hashMap.put("/login", "anon");
-        hashMap.put("/user/home", "authc");
-        hashMap.put("/user/set", "authc");
-        hashMap.put("/user/upload", "authc");
-        //filterFactoryBean.setFilters(MapUtil.of("auth",authFilter()));
-        hashMap.put("/collection/find", "auth");
-        hashMap.put("/collection/add", "auth");
-        hashMap.put("/collection/remove", "auth");*/
+        hashMap.put("/login", "anon");
+        hashMap.put("/love/*", "authc");
+        hashMap.put("/coll/*", "authc");
+        hashMap.put("/comment/*", "authc");
+        hashMap.put("/yui/add", "authc");
+        hashMap.put("/yui/pay", "authc");
+        hashMap.put("/post/add", "authc");
 
         filterFactoryBean.setFilterChainDefinitionMap(hashMap);
 

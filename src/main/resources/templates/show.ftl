@@ -58,13 +58,101 @@
 
                 </section>
                 <!-- 点赞，喜欢 -->
-                <span class="love">
-                        <a href=""><span class="glyphicon glyphicon-heart-empty"></span></a>
+                <#if love??>
+                    <span class="love">
+                        <span class="glyphicon glyphicon-heart"></span>
                     </span>
+                    <script>
+                        $(".love").click(function () {
+                            var url = "/love/remove";
+                            var params ={
+                                postId:${post.id}
+                            }
+                            $.ajax({
+                                url:url,
+                                type:"post",
+                                data:params,
+                                success:function (d) {
+                                    location.reload();
+                                },
+                                dataType:"json"
+                            })
+                        })
+                    </script>
+                <#else>
+                    <span class="love">
+                        <span class="glyphicon glyphicon-heart-empty"></span>
+                    </span>
+                    <script>
+                        $(".love").click(function () {
+                            var url = "/love/add";
+                            var params ={
+                                postId:${post.id}
+                            }
+                            $.ajax({
+                                url:url,
+                                type:"post",
+                                data:params,
+                                success:function (d) {
+                                    location.reload();
+                                },
+                                dataType:"json"
+                            })
+                        })
+                    </script>
+                </#if>
                 <!-- 收藏 -->
-                <span class="collection">
-                        <a href=""><span class="glyphicon glyphicon-star-empty"></span></a>
+                <#if coll??>
+                    <span class="collection">
+                        <span class="glyphicon glyphicon-star"></span>
                     </span>
+                    <script>
+                        $(".collection").click(function () {
+                            var url = "/coll/remove";
+                            var params ={
+                                postId:${post.id}
+                            }
+                            $.ajax({
+                                url:url,
+                                type:"post",
+                                data:params,
+                                success:function (d) {
+                                    location.reload();
+                                },
+                                dataType:"json"
+                            })
+                        })
+                    </script>
+                <#else>
+                    <span class="collection">
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    </span>
+                    <script>
+                        $(".collection").click(function () {
+                            var url = "/coll/add";
+                            var params ={
+                                postId:${post.id}
+                            }
+                            $.ajax({
+                                url:url,
+                                type:"post",
+                                data:params,
+                                success:function (d) {
+                                    location.reload();
+                                },
+                                dataType:"json"
+                            })
+                        })
+                    </script>
+                </#if>
+                <#-- 修改 -->
+                <span class="update-post">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </span>
+                <#-- 删除 -->
+                <span class="delete-post">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </span>
             </div>
         </div>
         <div class="fa-comment-sub">

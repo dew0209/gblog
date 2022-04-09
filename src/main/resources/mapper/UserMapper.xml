@@ -31,7 +31,7 @@
         <result property="password" column="password" />
     </resultMap>
     <!-- 注册用户 -->
-    <insert id="register" parameterType="com.example.gblog.vo.RegisterVo">
+    <insert id="register" parameterType="com.example.gblog.vo.RegisterVo" useGeneratedKeys="true" keyProperty="id">
         insert into x_user(username,email,password,created,modified) values (#{username},#{email},#{password},now(),now())
     </insert>
     <!-- 获取用户信息 -->

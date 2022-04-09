@@ -48,9 +48,32 @@ th {
     background-color: white;
     box-shadow: 0 0 30px lightgray;
 }
+
 .collection {
     position: absolute;
     top:30px;
+    left:-30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: white;
+    box-shadow: 0 0 30px lightgray;
+}
+.update-post {
+    position: absolute;
+    top:60px;
+    left:-30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: white;
+    box-shadow: 0 0 30px lightgray;
+}
+.delete-post {
+    position: absolute;
+    top:90px;
     left:-30px;
     width: 30px;
     height: 30px;

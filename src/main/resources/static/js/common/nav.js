@@ -20,6 +20,15 @@ $(function () {
     var loginSection = document.querySelector('.loginSection');
     var loginClose = document.querySelector('.loginClose');
     loginUpDown.addEventListener('click',()=>{
+        $.ajax({
+            url:"/godx",
+            type:"post",
+            success:function (d) {
+                loginSection.style.display = 'flex';
+                mask.style.display = 'block';
+            },
+            dataType:"json"
+        })
         loginSection.style.display = 'flex';
         mask.style.display = 'block';
     })

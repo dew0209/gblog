@@ -60,6 +60,7 @@ public class UserController {
     PostService postService;
 
 
+
     /**
      *
      * @param registerUser  注册的用户
@@ -91,6 +92,8 @@ public class UserController {
         registerUser.setPassword(SecureUtil.md5(password));
         //进行注册
         userService.register(registerUser);
+        //数据初始化
+        numService.add(registerUser.getId());
         return Result.success();
     }
     /*
