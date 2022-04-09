@@ -27,6 +27,10 @@
         <association property="user" column="user_id" select="com.example.gblog.mapper.UserMapper.getById"></association>
         <association property="type" column="type" select="com.example.gblog.mapper.TypeMapper.getById"></association>
     </resultMap>
+    <insert id="add">
+        insert into x_post(title,user_id,type,keywords1,keywords2,keywords3,price,content,,created,lastmd)
+                        values(#{post.title},#{userId},#{type},#{post.keywords1},#{post.keywords2},#{post.keywords3},#{post.price},#{post.content},now(),now());
+    </insert>
     <select id="getPostPay" resultMap="baseResultMap">
        select
         x_post.id as postId,
@@ -36,12 +40,12 @@
         x_user.username as username,
         x_post.created as created,
         x_post.view_count as viewCount
-         from x_post left join x_user on x_post.user_id = x_user.id where introduce is not null and type = 1 order by created desc limit #{st},#{size};
+         from x_post left join x_user on x_post.user_id = x_user.id where introduce is not null and type = 2 order by created desc limit #{st},#{size};
     </select>
     <select id="getTotalPay" resultType="java.lang.Integer">
-        select count(1) from x_post where introduce is not null;
+        select count(1) from x_post where introduce is not null and type = 2;
     </select>
     <select id="getById" resultMap="baseResultMap1">
-        select * from x_post where id = #{id};
+        select * from x_post where id = #{id} and type = 2;
     </select>
 </mapper>

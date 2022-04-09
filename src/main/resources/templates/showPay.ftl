@@ -47,7 +47,12 @@
                                                 <td style="font-size: 20px;text-align: right" class="show-4">${post.created?string('MM/dd/yyyy, HH:mm:ss')}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3"><div id="editormd-view-1" class="div-blog"><textarea style="" class="show-5">${post.introduce}</textarea></div></td>
+                                                <#if post.content??>
+                                                    <td colspan="3"><div id="editormd-view-1" class="div-blog"><textarea style="" class="show-5">${post.content}</textarea></div></td>
+                                                <#else>
+                                                    <td colspan="3"><div id="editormd-view-1" class="div-blog"><textarea style="" class="show-5">${post.introduce}</textarea></div></td>
+                                                </#if>
+
                                             </tr>
                                         </table>
                                     </div>
@@ -56,7 +61,7 @@
                         </li>
                     </ul>
                     <#if post.content??>
-
+                        <#-- 已经付费了，有内容 -->
                     <#else>
                         <form action="/yui/pay" method="post">
                             <input type="hidden" value="${post.price}" name="price">

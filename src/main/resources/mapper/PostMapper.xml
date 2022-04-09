@@ -63,6 +63,6 @@
         select count(1) from x_post where type = 1;
     </select>
     <select id="getById" resultMap="baseResultMap">
-        select * from x_post where id = #{id};
+        select * from x_post where id = #{id} and type = 1;
     </select>
 </mapper>

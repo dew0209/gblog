@@ -11,20 +11,25 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
+import com.example.gblog.bean.Order;
 import com.example.gblog.bean.Post;
+import com.example.gblog.bean.User;
 import com.example.gblog.common.lang.Result;
 import com.example.gblog.mapper.PayPostMapper;
 import com.example.gblog.service.CommentService;
+import com.example.gblog.service.OrderService;
 import com.example.gblog.service.PayPostService;
 import com.example.gblog.vo.BlogListVo;
 import com.example.gblog.vo.CommentVo;
 import com.example.gblog.vo.PageVo;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/yui")
@@ -35,6 +40,37 @@ public class PayPostController {
     PayPostService payPostService;
     @Autowired
     CommentService commentService;
+    @Autowired
+    OrderService orderService;
+
+    @ResponseBody
+    @PostMapping("/add")
+    public Result add(String title,String content,String keywords,Integer price,String introduce){
+        Post newPost = new Post();
+        newPost.setContent(content);
+        newPost.setTitle(title);
+        String[] keys = keywords.split(",");
+        if(0 < keys.length)newPost.setKeywords1(keys[0]);
+        if(1 < keys.length)newPost.setKeywords2(keys[1]);
+        if(2 < keys.length)newPost.setKeywords3(keys[2]);
+        //设置价格
+        newPost.setPrice(price);
+        //设置内容
+        newPost.setContent(content);
+        //设置创建时间，请调用数据库函数now()
+        //设置修改时间，请调用数据库函数now()
+        //设置三个不同的数据  访问量，评论数量，收藏数量
+        newPost.setViewCount(0);
+        newPost.setReviewCount(0);
+        newPost.setCollectCount(0);
+        //介绍，只针对付费，非付费设置为null
+        newPost.setIntroduce(content);
+        //type=1,userId=profile.getId()
+        payPostService.add(newPost);
+        return Result.success();
+    }
+
+
     @RequestMapping("/write")
     public String write(){
         return "writePay";
@@ -49,25 +85,51 @@ public class PayPostController {
     }
     @ResponseBody
     @PostMapping("/pay")
-    public String pay(Integer postId,Double price) throws AlipayApiException {
+    public String pay(Integer postId,Integer price) throws AlipayApiException {
+        //确保登录
+        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return "error";
+        Post byId = payPostService.getById(postId);
+        if(byId.getPrice() != price)return "error";
         System.out.println(postId +"===" + price);
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipaydev.com/gateway.do","2021000119660061",str,"json","utf-8",str1,"RSA2");
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
+        String tradeNo = System.currentTimeMillis() + "";
+        System.out.println(tradeNo);
         String body = "";
-        request.setBizContent("{\"out_trade_no\":\""+ System.currentTimeMillis() +"\","
+        request.setBizContent("{\"out_trade_no\":\""+ tradeNo +"\","
                 + "\"total_amount\":\""+ price +"\","
-                + "\"subject\":\""+ "测试" +"\","
+                + "\"subject\":\""+ "支付博客" +"\","
                 + "\"body\":\""+ body +"\","
                 + "\"timeout_express\":\"10m\","
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
-
-        request.setNotifyUrl("http://eureka7001.com:8080/post/blog/29");
-        request.setReturnUrl("http://eureka7001.com:8080/post/blog/29");
+        //回调地址去完成业务逻辑
+        request.setNotifyUrl("http://eureka7001.com:8080/yui/payreturn");
+        request.setReturnUrl("http://eureka7001.com:8080/yui/payreturn");
 
         AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
+        if(response.isSuccess()){
+            //该笔交易存在且未完成，不再计入
+            Order res = orderService.getByOrderId(tradeNo);
+            //将该笔交易存储到数据库中，状态为未支付状态
+            if(res == null){
+                orderService.addPayNo(price,tradeNo,user.getId(),postId);
+            }
+        }
         String form = response.getBody();
         System.out.println(form);
         return form;
+    }
+    @RequestMapping("/payreturn")
+    public String returnPay(HttpServletRequest request){
+        String tradeNo = request.getParameter("trade_no");//支付宝交易号  例如：2022040922001408460505827163
+        String totalAmount = request.getParameter("total_amount");//交易金额
+        String outTradeNo	 = request.getParameter("out_trade_no");
+        orderService.addRealPay(totalAmount,outTradeNo,tradeNo);
+        Order order = orderService.getByOutTradeNo(outTradeNo);
+        //返回到对应的付费博客页面，进行解锁。
+        if (order == null) return "error";
+        return "/yui/post/blog/" + order.getPostId();
     }
     @GetMapping("/post/blog/{id}")
     public String detail(@PathVariable("id")Integer id,HttpServletRequest request){

@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.gblog.mapper.OrderMapper">
+    <resultMap id="baseResultMap" type="com.example.gblog.bean.Order">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="orderId" column="order_id" />
+        <result property="postId" column="post_id" />
+        <result property="realOrderId" column="real_order_id" />
+        <result property="status" column="status" />
+    </resultMap>
+    <insert id="addPayNo">
+        insert into x_order(user_id,order_id,price,post_id) values(#{userId},#{tradeNo},#{price},#{postId});
+    </insert>
+    <update id="addRealPay">
+        update x_order set status = 1, price = #{price},real_order_id = #{realOrderId} where order_id = #{orderId};
+    </update>
 
-    <select id="getById" resultType="com.example.gblog.bean.Order">
+    <select id="getById" resultMap="baseResultMap">
         select * from x_order where user_id = #{userId} and post_id = #{postId};
+    </select>
+    <select id="getByOrderId" resultMap="baseResultMap">
+        select * from x_order where order_id = #{orderId};
+    </select>
+    <select id="getByOutTradeNo" resultMap="baseResultMap">
+        select * from x_order where order_id = #{outTradeNo} and status = 1;
     </select>
 </mapper>

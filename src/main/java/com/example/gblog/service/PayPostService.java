@@ -8,4 +8,6 @@ public interface PayPostService {
     PageVo<BlogListVo> getPostPay(Integer pn, Integer size);
 
     Post getById(Integer id);
+
+    void add(Post newPost);
 }

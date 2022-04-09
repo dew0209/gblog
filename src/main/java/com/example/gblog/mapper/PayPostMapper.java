@@ -14,4 +14,6 @@ public interface PayPostMapper {
     int getTotalPay();
 
     Post getById(@Param("id") Integer id);
+
+    void add(@Param("post") Post newPost,@Param("userId") Integer userId,@Param("type") int i);
 }

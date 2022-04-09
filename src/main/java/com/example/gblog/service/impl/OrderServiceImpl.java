@@ -20,4 +20,26 @@ public class OrderServiceImpl implements OrderService {
         if(profile == null) return  null;
         return orderMapper.getById(id, profile.getId());
     }
+
+
+
+    @Override
+    public void addPayNo(Integer price, String tradeNo, Integer id,Integer postId) {
+        orderMapper.addPayNo(price,tradeNo,id,postId);
+    }
+
+    @Override
+    public Order getByOrderId(String tradeNo) {
+        return orderMapper.getByOrderId(tradeNo);
+    }
+
+    @Override
+    public void addRealPay(String totalAmount, String outTradeNo, String tradeNo) {
+        orderMapper.addRealPay(totalAmount,outTradeNo,tradeNo);
+    }
+
+    @Override
+    public Order getByOutTradeNo(String outTradeNo) {
+        return orderMapper.getByOutTradeNo(outTradeNo);
+    }
 }

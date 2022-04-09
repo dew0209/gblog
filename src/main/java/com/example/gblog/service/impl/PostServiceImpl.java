@@ -10,6 +10,8 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostServiceImpl implements PostService {
     @Autowired
@@ -18,6 +20,13 @@ public class PostServiceImpl implements PostService {
     public PageVo<Post> getPost(int pn, int pnSize) {
         PageVo<Post> res = new PageVo<>();
         res.setList(postMapper.getPost((pn - 1) * pnSize,pnSize));
+        List<Post> list = res.getList();
+        for (Post post : list) {
+            //付费的博客
+            if (post.getType().getId() == 2){
+                post.setContent(post.getIntroduce());
+            }
+        }
         return res;
     }
 
@@ -46,6 +55,7 @@ public class PostServiceImpl implements PostService {
         //获得总数
         res.setTotalCount(getTotalNoPay());
         res.setList(postMapper.getPostNoPay((pn - 1) * size,size));
+
         return res;
     }
 

@@ -2,11 +2,13 @@ package com.example.gblog.service.impl;
 
 import com.example.gblog.bean.Order;
 import com.example.gblog.bean.Post;
+import com.example.gblog.bean.User;
 import com.example.gblog.mapper.PayPostMapper;
 import com.example.gblog.service.OrderService;
 import com.example.gblog.service.PayPostService;
 import com.example.gblog.vo.BlogListVo;
 import com.example.gblog.vo.PageVo;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +32,20 @@ public class PayPostServiceImpl implements PayPostService {
     @Override
     public Post getById(Integer id) {
         Post byId = payPostMapper.getById(id);
-        //用户是否已经付费过此订单
-        //if()  先设定都没有付费
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
         Order res = orderService.getById(id);
         if(res == null){
             //没有付费
             byId.setContent(null);
         }
         return byId;
+    }
+
+    @Override
+    public void add(Post newPost) {
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        Integer userId = user.getId();
+        payPostMapper.add(newPost,userId,2);
     }
 
     private int getTotalPay() {

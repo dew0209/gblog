@@ -19,4 +19,6 @@ public class BlogListVo {
     private Date created;
     //阅读量
     private Integer viewCount;
+    //类型
+    private Integer type;
 }

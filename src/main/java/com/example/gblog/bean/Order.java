@@ -8,5 +8,6 @@ public class Order {
     private String orderId;
     private Integer userId;
     private Integer postId;
-
+    private String realOrderId;
+    private Integer status;
 }
