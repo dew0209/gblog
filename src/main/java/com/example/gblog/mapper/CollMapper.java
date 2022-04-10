@@ -10,4 +10,6 @@ public interface CollMapper {
     void remove(@Param("postId") Integer postId,@Param("userId") Integer userId);
 
     Integer getById(@Param("postId") Integer postId,@Param("userId") Integer userId);
+
+    void delByPostId(@Param("postId") Integer id);
 }

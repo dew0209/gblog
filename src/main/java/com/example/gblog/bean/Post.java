@@ -20,6 +20,8 @@ public class Post {
     private Integer collectCount;
     private String introduce;
 
+    private String keywords;
+
     private Type type;
     private User user;
 }

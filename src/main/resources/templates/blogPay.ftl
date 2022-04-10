@@ -55,14 +55,16 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <#list 1..res.totalPage as i>
-                        <#if i == res.currPage>
-                            <li class="active"><a href="/post/${i}">${i}</a></li>
-                        </#if>
-                        <#if i != res.currPage>
-                            <li class=""><a href="/post/${i}">${i}</a></li>
-                        </#if>
-                    </#list>
+                    <#if res.totalPage != 0>
+                        <#list 1..res.totalPage as i>
+                            <#if i == res.currPage>
+                                <li class="active"><a href="/yui/${i}">${i}</a></li>
+                            </#if>
+                            <#if i != res.currPage>
+                                <li class=""><a href="/yui/${i}">${i}</a></li>
+                            </#if>
+                        </#list>
+                    </#if>
                     <li class="">
                         <a href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>

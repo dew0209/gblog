@@ -12,4 +12,6 @@ public interface CommentService {
     void addRe(Integer id, Integer postId, Integer replayId, Integer userId, String comment,Integer rId);
 
     void del(Integer id,Integer postId);
+
+    void delByPostId(Integer id);
 }

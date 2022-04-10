@@ -31,4 +31,9 @@ public class CollServiceImpl implements CollService {
         Integer userId = user.getId();//获得用户id
         return collMapper.getById(postId,userId);
     }
+
+    @Override
+    public void delByPostId(Integer id) {
+        collMapper.delByPostId(id);
+    }
 }

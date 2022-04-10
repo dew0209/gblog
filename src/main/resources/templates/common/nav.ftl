@@ -71,12 +71,7 @@
                             </li>
                         </ul>
                     </@shiro.user>
-                    <form class="navbar-form navbar-right move">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="搜索您想要的">
-                        </div>
-                        <button type="submit" class="btn btn-default">搜索</button>
-                    </form>
+
                 </div>
             </div>
         </nav>

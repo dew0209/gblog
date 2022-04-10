@@ -145,14 +145,19 @@
                         })
                     </script>
                 </#if>
-                <#-- 修改 -->
-                <span class="update-post">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </span>
-                <#-- 删除 -->
-                <span class="delete-post">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </span>
+                <@shiro.user>
+                    <@shiro.hasRole name="admin_${post.user.id}">
+                    <#-- 修改 -->
+                        <span class="update-post">
+                            <a href="/post/update/${post.id}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        </span>
+                    <#-- 删除 -->
+                        <span class="delete-post">
+                            <a href="/post/del/${post.id}"><span class="glyphicon glyphicon-trash"></span></a>
+                        </span>
+                    </@shiro.hasRole>
+                </@shiro.user>
+
             </div>
         </div>
         <div class="fa-comment-sub">

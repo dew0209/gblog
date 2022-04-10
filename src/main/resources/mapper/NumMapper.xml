@@ -10,6 +10,9 @@
     <insert id="add">
         insert into x_data(user_id) values(#{userId});
     </insert>
+    <update id="addReading">
+        update x_data set reading_num = reading_num + 1 where user_id = #{userId};
+    </update>
     <select id="getNumByUserId" resultMap="baseResultMap">
         select * from x_data where user_id = #{id};
     </select>

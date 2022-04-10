@@ -17,7 +17,7 @@
                             </#if>
                         </tr>
                         <tr>
-                            <td><a href=""><img class="avatar show-3" src="${post.user.avatar}" alt=""> <span class="show-7">${post.user.username}</span></a></td>
+                            <td><a href="/user/${post.user.id}"><img class="avatar show-3" src="${post.user.avatar}" alt=""> <span class="show-7">${post.user.username}</span></a></td>
                             <td></td>
                             <td style="font-size: 20px;text-align: right" class="show-4">${post.created?string('MM/dd/yyyy, HH:mm:ss')}</td>
                         </tr>
@@ -97,7 +97,7 @@
                                     "                            <td style=\"text-align: right\" class=\"styleShow\"><a href=\"\" class=\"show-2\">{}</a></td>\n" +
                                     "                        </tr>\n" +
                                     "                        <tr>\n" +
-                                    "                            <td><a href=\"\"><img class=\"avatar show-3\" src=\"{post.user.avatar}\" alt=\"\"><span class=\"show-7\"></span></a></td>\n" +
+                                    "                            <td><a href=\"/user/"+value.user.id+"\" class=\"show11\"><img class=\"avatar show-3\" src=\"{post.user.avatar}\" alt=\"\"><span class=\"show-7\"></span></a></td>\n" +
                                     "                            <td></td>\n" +
                                     "                            <td style=\"font-size: 20px;text-align: right\" class=\"show-4\">{}</td>\n" +
                                     "                        </tr>\n" +
@@ -123,7 +123,6 @@
                                 latL.find(".show-4").html(new Date(value.created).toLocaleString("en-US", {hour12: false}));
                                 latL.find(".show-5").html(value.content);
                                 latL.find(".show-6").attr("id","editormd-view" + value.id);
-
                             });
                             renderMd();
                         },

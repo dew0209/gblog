@@ -19,4 +19,9 @@ public class NumServiceImpl implements NumService {
     public void add(Integer id) {
         numMapper.add(id);
     }
+
+    @Override
+    public void updateReading(Integer id) {
+        numMapper.addReading(id);
+    }
 }

@@ -10,4 +10,8 @@ public interface PayPostService {
     Post getById(Integer id);
 
     void add(Post newPost);
+
+    void update(Post newPost);
+
+    void del(Integer id);
 }

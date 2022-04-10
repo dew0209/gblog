@@ -4,8 +4,8 @@ import com.example.gblog.bean.Order;
 import com.example.gblog.bean.Post;
 import com.example.gblog.bean.User;
 import com.example.gblog.mapper.PayPostMapper;
-import com.example.gblog.service.OrderService;
-import com.example.gblog.service.PayPostService;
+import com.example.gblog.mapper.PostMapper;
+import com.example.gblog.service.*;
 import com.example.gblog.vo.BlogListVo;
 import com.example.gblog.vo.PageVo;
 import org.apache.shiro.SecurityUtils;
@@ -18,6 +18,12 @@ public class PayPostServiceImpl implements PayPostService {
     PayPostMapper payPostMapper;
     @Autowired
     OrderService orderService;
+    @Autowired
+    ReadingService readingService;
+    @Autowired
+    PostMapper postMapper;
+    @Autowired
+    NumService numService;
 
     @Override
     public PageVo<BlogListVo> getPostPay(Integer pn, Integer size) {
@@ -42,6 +48,18 @@ public class PayPostServiceImpl implements PayPostService {
         if(res == null){
             //没有付费
             byId.setContent(null);
+        }else if(byId.getUser().getId() != user.getId()) {
+            //付费了 更新阅读
+            //查询这个人是否已经访问这个博客了
+            int ans = readingService.getByPostIdAndUserId(id,user.getId());
+            if(ans == 0){
+                //更新reading表
+                readingService.insert(id,user.getId());
+                //更新post表
+                postMapper.updateViewCount(id);
+                //更新data表
+                numService.updateReading(payPostMapper.getById(id).getUser().getId());
+            }
         }
         return byId;
     }
@@ -51,6 +69,17 @@ public class PayPostServiceImpl implements PayPostService {
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
         Integer userId = user.getId();
         payPostMapper.add(newPost,userId,2);
+    }
+
+    @Override
+    public void update(Post newPost) {
+        payPostMapper.update(newPost);
+    }
+
+    @Override
+    public void del(Integer id) {
+        payPostMapper.del(id);
+
     }
 
     private int getTotalPay() {

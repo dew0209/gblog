@@ -58,10 +58,14 @@ public class PostController {
     @GetMapping("/blog/{id}")
     public String showDetail(@PathVariable("id") Integer id,HttpServletRequest request){
         Post post = postService.getById(id);
+
         List<CommentVo> comment = commentService.getComment(id);
         request.setAttribute("post",post);
         request.setAttribute("comment",comment);
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if (user != null && user.getId() != post.getUser().getId()){
+            postService.addReading(id,user.getId());
+        }
         if(user == null)return "show";
         Integer loveSUm = loveService.getById(id);
         Integer collSum = collService.getById(id);
@@ -71,5 +75,52 @@ public class PostController {
         if(collSum != 0)
             request.setAttribute("coll",collSum);
         return "show";
+    }
+    @RequestMapping("/update/{id}")
+    public String updateTo(@PathVariable("id")Integer id,HttpServletRequest request){
+        Post post = postService.getById(id);
+        //查询登录状态
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return "error";
+        Integer userId = user.getId();
+        if (userId != post.getUser().getId())return "erroe";
+        String str = "";
+        if (post.getKeywords1() != null)str += post.getKeywords1() + ",";
+        if (post.getKeywords2() != null)str += post.getKeywords2() + ",";
+        if (post.getKeywords3() != null)str += post.getKeywords3();
+        if(str.charAt(str.length() - 1) == ',')str = str.substring(0,str.length() - 2);
+        post.setKeywords(str);
+        request.setAttribute("post",post);
+        return "update";
+    }
+    @ResponseBody
+    @RequestMapping("/updateToNoPay")
+    public Result update(Integer id,String title,String content,String keywords){
+        Post post = postService.getById(id);
+        //查询登录状态
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return Result.fail("未登录");
+        Integer userId = user.getId();
+        if (userId != post.getUser().getId())return Result.fail("非法操作");
+        post.setContent(content);
+        String[] keys = keywords.split(",");//关键字数组
+        post.setTitle(title);
+        //设置关键字
+        if(0 < keys.length)post.setKeywords1(keys[0]);
+        if(1 < keys.length)post.setKeywords2(keys[1]);
+        if(2 < keys.length)post.setKeywords3(keys[2]);
+        postService.update(post);
+        return Result.success();
+    }
+    @RequestMapping("/del/{id}")
+    public String del(@PathVariable("id")Integer id){
+        Post post = postService.getById(id);
+        //查询登录状态
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return "eroor";
+        Integer userId = user.getId();
+        if (userId != post.getUser().getId())return "error";
+        postService.del(id);
+        return "/post/1";
     }
 }

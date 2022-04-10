@@ -160,6 +160,19 @@
                         })
                     </script>
                 </#if>
+                <@shiro.user>
+                    <@shiro.hasRole name="admin_${post.user.id}">
+                        <#-- 修改 -->
+                            <span class="update-post">
+                            <a href="/yui/updateTo/${post.id}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        </span>
+                        <#-- 删除 -->
+                            <span class="delete-post">
+                            <a href="/yui/del/${post.id}"><span class="glyphicon glyphicon-trash"></span></a>
+                        </span>
+                    </@shiro.hasRole>
+                </@shiro.user>
+
             </div>
         </div>
         <div class="fa-comment-sub">
@@ -355,7 +368,7 @@
                 type:"post",
                 data:params,
                 success:function (d) {
-                    location.href = "/post/blog/${post.id}";
+                    location.href = "/yui/post/blog/${post.id}";
                 },
                 dataType:"json"
             })

@@ -151,4 +151,47 @@ public class PayPostController {
             request.setAttribute("coll",collSum);
         return "showPay";
     }
+    @RequestMapping("/updateTo/{id}")
+    public String updateTo(@PathVariable("id") Integer id,HttpServletRequest request){
+        //查询登录状态
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return "error";
+        Post post = payPostService.getById(id);
+        if (post.getUser().getId() != user.getId())return "error";
+        String str = "";
+        if (post.getKeywords1() != null)str += post.getKeywords1() + ",";
+        if (post.getKeywords2() != null)str += post.getKeywords2() + ",";
+        if (post.getKeywords3() != null)str += post.getKeywords3();
+        if(str.charAt(str.length() - 1) == ',')str = str.substring(0,str.length() - 2);
+        post.setKeywords(str);
+        request.setAttribute("post",post);
+        return "updatePay";
+    }
+    @ResponseBody
+    @PostMapping("/update")
+    public Result updateA(Integer id,String title,String content,String keywords,Integer price,String introduce){
+        Post newPost = payPostService.getById(id);
+        newPost.setContent(content);
+        newPost.setTitle(title);
+        String[] keys = keywords.split(",");
+        if(0 < keys.length)newPost.setKeywords1(keys[0]);
+        if(1 < keys.length)newPost.setKeywords2(keys[1]);
+        if(2 < keys.length)newPost.setKeywords3(keys[2]);
+        newPost.setPrice(price);
+        newPost.setContent(content);
+        newPost.setIntroduce(introduce);
+        payPostService.update(newPost);
+        return Result.success();
+    }
+    @RequestMapping("/del/{id}")
+    public String del(@PathVariable("id") Integer id){
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(user == null)return "error";
+        Integer userId = user.getId();
+        Post byId = payPostService.getById(id);
+        if(byId.getUser().getId() != userId)return "error";
+        payPostService.del(id);
+        return "redirect:/yui/1";
+    }
+
 }

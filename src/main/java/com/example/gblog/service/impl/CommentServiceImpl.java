@@ -66,4 +66,9 @@ public class CommentServiceImpl implements CommentService {
         }
 
     }
+
+    @Override
+    public void delByPostId(Integer id) {
+        commentMapper.delByPistId(id);
+    }
 }

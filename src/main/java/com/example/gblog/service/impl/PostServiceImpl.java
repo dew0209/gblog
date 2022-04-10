@@ -3,7 +3,7 @@ package com.example.gblog.service.impl;
 import com.example.gblog.bean.Post;
 import com.example.gblog.bean.User;
 import com.example.gblog.mapper.PostMapper;
-import com.example.gblog.service.PostService;
+import com.example.gblog.service.*;
 import com.example.gblog.vo.BlogListVo;
 import com.example.gblog.vo.PageVo;
 import org.apache.shiro.SecurityUtils;
@@ -16,6 +16,17 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     @Autowired
     PostMapper postMapper;
+    @Autowired
+    CommentService commentService;
+    @Autowired
+    CollService collService;
+    @Autowired
+    LoveService loveService;
+    @Autowired
+    ReadingService readingService;
+    @Autowired
+    NumService numService;
+
     @Override
     public PageVo<Post> getPost(int pn, int pnSize) {
         PageVo<Post> res = new PageVo<>();
@@ -111,6 +122,34 @@ public class PostServiceImpl implements PostService {
     @Override
     public void subReviewCount(Integer postId) {
         postMapper.subReviewCount(postId);
+    }
+
+    @Override
+    public void update(Post post) {
+        postMapper.update(post);
+    }
+
+    @Override
+    public void del(Integer id) {
+        //删除博客  删除评论 删除收藏 删除喜欢（点赞）
+        postMapper.del(id);
+        commentService.delByPostId(id);
+        collService.delByPostId(id);
+        loveService.delByPostId(id);
+    }
+
+    @Override
+    public void addReading(Integer id,Integer userId) {
+        //查询这个人是否已经访问这个博客了
+        int res = readingService.getByPostIdAndUserId(id,userId);
+        if(res == 0){
+            //更新reading表
+            readingService.insert(id,userId);
+            //更新post表
+            postMapper.updateViewCount(id);
+            //更新data表
+            numService.updateReading(postMapper.getById(id).getUser().getId());
+        }
     }
 
     private int getTotalNoPay() {

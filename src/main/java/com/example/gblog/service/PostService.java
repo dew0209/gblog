@@ -20,4 +20,11 @@ public interface PostService {
     void addReviewCount(Integer postId);
 
     void subReviewCount(Integer postId);
+
+    void update(Post post);
+
+    void del(Integer id);
+
+    void addReading(Integer id,Integer userId);
+
 }

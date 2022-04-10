@@ -6,4 +6,6 @@ public interface NumService {
     Num getNumByUserId(Integer id);
 
     void add(Integer id);
+
+    void updateReading(Integer id);
 }

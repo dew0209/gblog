@@ -31,4 +31,9 @@ public class LoveServiceImpl implements LoveService {
         Integer userId = user.getId();//获得用户id
         return loveMapper.getById(id,userId);
     }
+
+    @Override
+    public void delByPostId(Integer id) {
+        loveMapper.delByPostId(id);
+    }
 }

@@ -23,6 +23,9 @@
     <update id="changeStatus">
         update x_comment set status = 1 where id = #{id};
     </update>
+    <delete id="delByPistId">
+        delete from x_comment where post_id = #{postId}
+    </delete>
     <select id="getComment" resultMap="baserResultMap">
         select * from x_comment
         left join x_user on x_comment.user_id = x_user.id

@@ -29,4 +29,10 @@ public interface PostMapper {
     void addReviewCount(@Param("id") Integer postId);
 
     void subReviewCount(@Param("id")Integer postId);
+
+    void update(@Param("post") Post post);
+
+    void del(@Param("id") Integer id);
+
+    void updateViewCount(@Param("postId") Integer id);
 }

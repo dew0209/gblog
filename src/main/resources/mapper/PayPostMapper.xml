@@ -31,6 +31,13 @@
         insert into x_post(title,user_id,type,keywords1,keywords2,keywords3,price,content,created,lastmd,introduce)
                         values(#{post.title},#{userId},#{type},#{post.keywords1},#{post.keywords2},#{post.keywords3},#{post.price},#{post.content},now(),now(),#{post.introduce});
     </insert>
+    <update id="update">
+        update x_post set title = #{post.title},content = #{post.content},keywords1 = #{post.keywords1},
+                    keywords2 = #{post.keywords2},keywords3 = #{post.keywords3},price = #{post.price} where id = #{post.id} and type = 2;
+    </update>
+    <update id="del">
+        update x_post set x_post.status = 1 where id = #{id};
+    </update>
     <select id="getPostPay" resultMap="baseResultMap">
        select
         x_post.id as postId,
@@ -40,10 +47,10 @@
         x_user.username as username,
         x_post.created as created,
         x_post.view_count as viewCount
-         from x_post left join x_user on x_post.user_id = x_user.id where introduce is not null and type = 2 order by created desc limit #{st},#{size};
+         from x_post left join x_user on x_post.user_id = x_user.id where introduce is not null and type = 2 and x_post.status = 0 order by created desc limit #{st},#{size};
     </select>
     <select id="getTotalPay" resultType="java.lang.Integer">
-        select count(1) from x_post where introduce is not null and type = 2;
+        select count(1) from x_post where introduce is not null and type = 2 and x_post.status = 0;
     </select>
     <select id="getById" resultMap="baseResultMap1">
         select * from x_post where id = #{id} and type = 2;

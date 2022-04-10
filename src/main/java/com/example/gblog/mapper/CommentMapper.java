@@ -20,4 +20,6 @@ public interface CommentMapper {
     List<Integer> getFloorIds(@Param("reId") Integer integer);
 
     void changeStatus(@Param("id") Integer integer);
+
+    void delByPistId(@Param("postId") Integer id);
 }

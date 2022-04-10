@@ -36,11 +36,22 @@
     <update id="subReviewCount">
         update x_post set review_count = review_count - 1 where id = #{id};
     </update>
+    <!-- 修改博客内容 -->
+    <update id="update">
+        update x_post set title = #{post.title} , content = #{post.content} , keywords1 = #{post.keywords1}, keywords2 = #{post.keywords2}
+                , keywords3 = #{post.keywords3},lastmd = now() where id = #{post.id};
+    </update>
+    <update id="updateViewCount">
+        update x_post set view_count = view_count + 1 where id = #{postId};
+    </update>
+    <delete id="del">
+        delete from x_post where id = #{id} and type = 1;
+    </delete>
     <select id="getPost" resultMap="baseResultMap">
-        select * from x_post order by created desc limit #{st},#{size}
+        select * from x_post where x_post.status = 0 order by created desc limit #{st},#{size}
     </select>
     <select id="getPostById" resultMap="baseResultMap">
-        select * from x_post where user_id = #{id} order by created desc limit #{st},#{size}
+        select * from x_post where user_id = #{id} and x_post.status = 0 order by created desc limit #{st},#{size}
     </select>
     <select id="getTotalByStatus" resultType="java.lang.Integer">
         select count(1) from x_post where user_id = #{id} and status = #{status};
@@ -57,7 +68,7 @@
         x_user.username as username,
         x_post.created as created,
         x_post.view_count as viewCount
-         from x_post left join x_user on x_post.user_id = x_user.id where introduce is null and type = 1 order by created desc limit #{st},#{size};
+         from x_post left join x_user on x_post.user_id = x_user.id where introduce is null and type = 1 and x_post.status = 0 order by created desc limit #{st},#{size};
     </select>
     <select id="getTotalNoPay" resultType="java.lang.Integer">
         select count(1) from x_post where type = 1;

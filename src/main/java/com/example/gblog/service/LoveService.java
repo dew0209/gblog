@@ -6,4 +6,6 @@ public interface LoveService {
     void remove(Integer postId);
 
     Integer getById(Integer id);
+
+    void delByPostId(Integer id);
 }
