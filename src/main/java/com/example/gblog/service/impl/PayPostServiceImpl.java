@@ -7,10 +7,14 @@ import com.example.gblog.mapper.PayPostMapper;
 import com.example.gblog.mapper.PostMapper;
 import com.example.gblog.service.*;
 import com.example.gblog.vo.BlogListVo;
+import com.example.gblog.vo.CollVo;
 import com.example.gblog.vo.PageVo;
+import com.example.gblog.vo.PayPostVo;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PayPostServiceImpl implements PayPostService {
@@ -80,6 +84,32 @@ public class PayPostServiceImpl implements PayPostService {
     public void del(Integer id) {
         payPostMapper.del(id);
 
+    }
+
+    @Override
+    public PageVo<PayPostVo> getByUserId(Integer userId,Integer pn,Integer pnSize) {
+        List<PayPostVo> list = payPostMapper.getByUserId(userId,(pn - 1) * pnSize,pnSize);
+        PageVo<PayPostVo> res = new PageVo<>();
+        res.setList(list);
+        res.setPageSize(pnSize);
+        res.setCurrPage(pn);
+        res.setTotalCount(getTotalPayByUserId(userId));
+        return res;
+    }
+
+    @Override
+    public PageVo<CollVo> getColl(Integer id, Integer pn, Integer pnSize) {
+        List<CollVo> res = payPostMapper.getColl(id,(pn - 1) * pnSize,pnSize);
+        PageVo<CollVo> vo = new PageVo<>();
+        vo.setTotalCount(payPostMapper.getTotalColl(id));
+        vo.setList(res);
+        vo.setCurrPage(pn);
+        vo.setPageSize(pnSize);
+        return vo;
+    }
+
+    private int getTotalPayByUserId(Integer userId) {
+        return payPostMapper.getTotalPayByUserId(userId);
     }
 
     private int getTotalPay() {

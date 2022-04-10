@@ -15,4 +15,6 @@ public interface OrderMapper {
     void addRealPay(@Param("price") String totalAmount,@Param("orderId") String outTradeNo,@Param("realOrderId") String tradeNo);
 
     Order getByOutTradeNo(@Param("outTradeNo") String outTradeNo);
+    Integer getNum(@Param("postId")Integer id);
+    Integer getAllNum(@Param("postId")Integer id);
 }

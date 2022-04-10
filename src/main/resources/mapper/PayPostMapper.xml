@@ -27,6 +27,14 @@
         <association property="user" column="user_id" select="com.example.gblog.mapper.UserMapper.getById"></association>
         <association property="type" column="type" select="com.example.gblog.mapper.TypeMapper.getById"></association>
     </resultMap>
+    <resultMap id="baseResultMap2" type="com.example.gblog.vo.PayPostVo">
+        <id column="id" property="id" />
+        <result column="title" property="title"/>
+        <result column="created" property="date" />
+        <association property="getNum" select="com.example.gblog.mapper.OrderMapper.getNum" column="id" />
+        <association property="allNum" select="com.example.gblog.mapper.OrderMapper.getAllNum" column="id" />
+    </resultMap>
+
     <insert id="add">
         insert into x_post(title,user_id,type,keywords1,keywords2,keywords3,price,content,created,lastmd,introduce)
                         values(#{post.title},#{userId},#{type},#{post.keywords1},#{post.keywords2},#{post.keywords3},#{post.price},#{post.content},now(),now(),#{post.introduce});
@@ -54,5 +62,26 @@
     </select>
     <select id="getById" resultMap="baseResultMap1">
         select * from x_post where id = #{id} and type = 2;
+    </select>
+    <select id="getByUserId" resultMap="baseResultMap2">
+        select * from x_post where user_id = #{userId} and type = 2 order by created desc limit #{st},#{size};
+    </select>
+    <select id="getTotalPayByUserId" resultType="java.lang.Integer">
+        select count(1) from x_post where user_id = #{userId} and type = 2;
+    </select>
+    <resultMap id="special" type="com.example.gblog.vo.CollVo">
+        <result column="postId" property="postId"/>
+        <result column="userId" property="userId"/>
+        <result column="typeName" property="typeName"/>
+        <result column="username" property="username"/>
+        <result column="date" property="date"/>
+        <result column="title" property="title"/>
+    </resultMap>
+    <select id="getColl" resultMap="special">
+        SELECT username,title,x_post.created as date,x_user.id AS userId,x_post.id AS postId,type_name AS typeName FROM x_coll LEFT JOIN x_post ON x_coll.post_id = x_post.id LEFT JOIN  x_user ON x_post.`user_id` = x_user.id
+        LEFT JOIN x_type ON x_type.id = x_post.`type` where x_coll.user_id = #{userId} limit #{st},#{size};
+    </select>
+    <select id="getTotalColl" resultType="java.lang.Integer">
+        select count(1) from x_coll where user_id = #{userId};
     </select>
 </mapper>

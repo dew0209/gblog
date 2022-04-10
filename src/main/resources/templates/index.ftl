@@ -121,7 +121,11 @@
                                 latL.find(".show-3").attr("src",value.user.avatar);
                                 latL.find(".show-7").text(value.user.username);
                                 latL.find(".show-4").html(new Date(value.created).toLocaleString("en-US", {hour12: false}));
-                                latL.find(".show-5").html(value.content);
+                                if(value.type.id==2){
+                                    latL.find(".show-5").html(value.introduce);
+                                }else {
+                                    latL.find(".show-5").html(value.content);
+                                }
                                 latL.find(".show-6").attr("id","editormd-view" + value.id);
                             });
                             renderMd();

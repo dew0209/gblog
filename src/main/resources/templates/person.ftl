@@ -14,16 +14,16 @@
                         <div>${current_user.sign}</div>
                     </li>
                     <li class="list-group-item">
-                        <div><span>关注数：</span> ${nums.focusNum} </div>
+                        <#--<div><span>关注数：</span> ${nums.focusNum} </div>-->
                         <div><span>阅读量：</span> ${nums.readingNum} </div>
-                        <div><span>粉丝数：</span> ${nums.fansNum} </div>
+                        <#--<div><span>粉丝数：</span> ${nums.fansNum} </div>-->
                         <div style="text-align: right">
-                            <#if current_user.status = 1>
+                            <#--<#if current_user.status = 1>
                                 在线
                             </#if>
                             <#if current_user.status != 1>
                                 离线
-                            </#if>
+                            </#if>-->
                         </div>
                     </li>
                     <li class="list-group-item p-in-fa" style="width: 140px;height: 140px">
@@ -46,8 +46,6 @@
                         <li class="item-click"><a href="#">付费</a></li>
                         <li class="item-click"><a href="#">收藏</a></li>
                         <!-- 只对本人开放 -->
-                        <li class="item-click"><a href="#">粉丝</a></li>
-                        <li class="item-click"><a href="#">关注</a></li>
                         <li class="item-click"><a href="#">通知</a></li>
                     </ul>
                 </nav>
@@ -65,10 +63,16 @@
                                             <tr>
                                                 <td class="styleShow show-1">${post.type.typeName}</td>
                                                 <td></td>
-                                                <td style="text-align: right" class="styleShow"><a href="" class="show-2">${post.title}</a></td>
+                                                <#if post.content??>
+                                                    <td style="text-align: right" class="styleShow"><a href="/post/blog/${post.id}" class="show-2">${post.title}</a></td>
+                                                <#else>
+                                                    <td style="text-align: right" class="styleShow"><a href="/yui/post/blog/${post.id}" class="show-2">${post.title}</a></td>
+                                                </#if>
+
                                             </tr>
                                             <tr>
-                                                <td><a href=""><img class="avatar show-3" src="${post.user.avatar}" alt=""> <span class="show-7">${post.user.username}</span></a></td>
+
+                                                <td><a href="/user/${post.user.id}"><img class="avatar show-3" src="${post.user.avatar}" alt=""> <span class="show-7">${post.user.username}</span></a></td>
                                                 <td></td>
                                                 <td style="font-size: 20px;text-align: right" class="show-4">${post.created?string('MM/dd/yyyy, HH:mm:ss')}</td>
                                             </tr>
@@ -120,7 +124,7 @@
                         </li>
                         <!-- 付费对本人和非本人有不同的区别 -->
                         <li class="item-show">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-pay">
                                 <thead>
                                 <tr>
                                     <th scope="row">#</th>
@@ -183,18 +187,13 @@
 
                             <div align="right">
                                 <nav aria-label="Page navigation">
-                                    <ul class="pagination" style="margin-right: 5px">
+                                    <ul class="pagination pagination-pay-fa" style="margin-right: 5px">
                                         <li>
                                             <a href="#" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li class="active"><a href="#" >1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li>
+                                        <li class="pay-pagination">
                                             <a href="#" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>
@@ -211,7 +210,7 @@
                             <!--
                                 类型	标题	作者	日期	阅读	删除
                             -->
-                            <table class="table table-striped">
+                            <table class="table table-striped table-coll">
                                 <thead>
                                 <tr>
                                     <th scope="row">#</th>
@@ -219,82 +218,23 @@
                                     <th>标题</th>
                                     <th>作者</th>
                                     <th>日期</th>
-                                    <th>阅读</th>
-                                    <th>删除</th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>博客</td>
-                                    <td>spring学习笔记</td>
-                                    <td>godx</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>12</td>
-                                    <td><a href="#">删除</a></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>博客</td>
-                                    <td>spring学习笔记</td>
-                                    <td>godx</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>12</td>
-                                    <td><a href="#">删除</a></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>博客</td>
-                                    <td>spring学习笔记</td>
-                                    <td>godx</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>12</td>
-                                    <td><a href="#">删除</a></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>博客</td>
-                                    <td>spring学习笔记</td>
-                                    <td>godx</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>12</td>
-                                    <td><a href="#">删除</a></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>博客</td>
-                                    <td>spring学习笔记</td>
-                                    <td>godx</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>12</td>
-                                    <td><a href="#">删除</a></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>博客</td>
-                                    <td>spring学习笔记</td>
-                                    <td>godx</td>
-                                    <td>2022-04-02 10:23:00</td>
-                                    <td>12</td>
-                                    <td><a href="#">删除</a></td>
-                                </tr>
                                 </tbody>
                             </table>
 
                             <div align="right">
                                 <nav aria-label="Page navigation">
-                                    <ul class="pagination" style="margin-right: 5px">
+                                    <ul class="pagination pagination-coll-fa" style="margin-right: 5px">
                                         <li>
                                             <a href="#" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li class="active"><a href="#" >1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li>
+
+                                        <li class="coll-pagination">
                                             <a href="#" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>
@@ -303,11 +243,7 @@
                                 </nav>
                             </div>
                         </li>
-                        <!-- 只对本人开放 -->
-                        <li class="item-show">粉丝 内容</li>
-                        <li class="item-show">关注 内容</li>
                         <li class="item-show">通知 内容</li>
-
                     </ul>
 
                 </section>
@@ -393,10 +329,19 @@
                                 var latL = $(".pe-blog").children(":last-child");
                                 latL.find(".show-1").html(value.type.typeName);
                                 latL.find(".show-2").html(value.title);
+                                if(value.type.id==2){
+                                    latL.find(".show-2").attr("href","/yui/post/blog/" + value.id);
+                                }else {
+                                    latL.find(".show-2").attr("href","/post/blog/" + value.id);
+                                }
                                 latL.find(".show-3").attr("src",value.user.avatar);
                                 latL.find(".show-7").text(value.user.username);
                                 latL.find(".show-4").html(new Date(value.created).toLocaleString("en-US", {hour12: false}));
-                                latL.find(".show-5").html(value.content);
+                                if(value.type.id==2){
+                                    latL.find(".show-5").html(value.introduce);
+                                }else {
+                                    latL.find(".show-5").html(value.content);
+                                }
                                 latL.find(".show-6").attr("id","editormd-view" + value.id);
                             });
                             renderMd();
@@ -417,11 +362,138 @@
                         $(val).css("display","block");
                         if(index != 0)ok = true;
                         else ok = false;
-                        if(index == 1)f1(1);
+                        if(index == 1)f1(1);//博客
+                        if(index == 2)f2(1);//付费
+                        if(index == 3)f3(1);//收藏
+                        if(index == 4)f4(1);//通知
                     }
                 })
             })
         });
+        function f4(pn) {
+            console.log("通知部分");
+        }
+        function f3(pn) {
+            console.log("收藏部分");
+            //清空数据
+            $(".table-coll").find("tbody").children().remove();
+            //清空分页
+            $(".pagination-coll-fa").children(".paging-btn").remove();
+            var params = {
+                pn:pn,
+                pnSize:10,
+                id:${current_id}
+            };
+            $.ajax({
+                url:"/user/f3",
+                type:"post",
+                data:params,
+                success:function (d) {
+                    //分页等数据都在这里
+                    console.log(d);
+                    //回显分页
+                    for(var i = 1;i <= d.data.totalPage;i++){
+                        console.log("处理分页");
+                        var eleStr = "";
+                        if(i == d.data.currPage){
+                            eleStr = "<li class=\"active paging-btn\"><a href=\"JavaScript:f3("+i+")\" >"+i+"</a></li>"
+
+                        }else {
+                            eleStr = "<li class=\"paging-btn\"><a href=\"JavaScript:f3("+i+")\" >"+i+"</a></li>";
+                        }
+                        $(".coll-pagination").before(eleStr);
+                    }
+
+                    /*
+                    *
+                    *
+                    * <th scope="row">1</th>
+                                    <td>博客</td>
+                                    <td>spring学习笔记</td>
+                                    <td>godx</td>
+                                    <td>2022-04-02 10:23:00</td>
+                                    <td><a href="#">删除</a></td>
+                    * */
+                    //回显数据
+                    for(var i = 0;i < d.data.list.length;i++){
+
+                        console.log(d.data.list[i].postId);
+                        if(d.data.list[i].typeName == "博客"){
+                            //创建元素
+                            var eleTr = "<tr>\n" +
+                                "                                        <th scope=\"row\">"+ ((pn - 1)* 10 + (i + 1))+"</th>\n" +
+                                "                                        <td>"+d.data.list[i].typeName+"</td>\n" +
+                                "                                        <td><a href='/post/blog/" + d.data.list[i].postId + "'>"+d.data.list[i].title+"</a></td>\n" +
+                                "                                        <td><a href='/user/"+ d.data.list[i].userId +"'>"+d.data.list[i].username+"</a></td>\n" +
+                                "                                        <td>"+new Date(d.data.list[i].date).toLocaleString("en-US", {hour12: false})+"</td>\n" +
+                                "                                    </tr>"
+                            $(".table-coll").find("tbody").append(eleTr);
+                        }else {
+                            //创建元素
+                            var eleTr = "<tr>\n" +
+                                "                                        <th scope=\"row\">"+ ((pn - 1)* 10 + (i + 1))+"</th>\n" +
+                                "                                        <td>"+d.data.list[i].typeName+"</td>\n" +
+                                "                                        <td><a href='/yui/post/blog/" + d.data.list[i].postId + "'>"+d.data.list[i].title+"</a></td>\n" +
+                                "                                        <td><a href='/user/"+ d.data.list[i].userId +"'>"+d.data.list[i].username+"</a></td>\n" +
+                                "                                        <td>"+new Date(d.data.list[i].date).toLocaleString("en-US", {hour12: false})+"</td>\n" +
+                                "                                    </tr>"
+                            $(".table-coll").find("tbody").append(eleTr);
+                        }
+                    }
+
+                },
+                dataType:"json"
+            });
+        }
+        function f2(pn) {
+            console.log("付费部分");
+            //处理付费部分的逻辑
+            //清空数据
+            $(".table-pay").find("tbody").children().remove();
+            //清空分页
+            $(".pagination-pay-fa").children(".paging-btn").remove();
+            //获取数据
+            var params = {
+                pn:pn,
+                pnSize:10,
+                id:${current_id}
+            };
+            $.ajax({
+                url:"/user/f2",
+                type:"post",
+                data:params,
+                success:function (d) {
+                    //分页等数据都在这里
+                    console.log(d);
+                    //回显分页
+                    for(var i = 1;i <= d.data.totalPage;i++){
+                        console.log("处理分页");
+                        var eleStr = "";
+                        if(i == d.data.currPage){
+                            eleStr = "<li class=\"active paging-btn\"><a href=\"JavaScript:f2("+i+")\" >"+i+"</a></li>"
+
+                        }else {
+                            eleStr = "<li class=\"paging-btn\"><a href=\"JavaScript:f2("+i+")\" >"+i+"</a></li>";
+                        }
+                        $(".pay-pagination").before(eleStr);
+                    }
+                    //回显数据
+                    for(var i = 0;i < d.data.list.length;i++){
+                        console.log(d.data.list[i].title);
+                        //创建元素
+                        var eleTr = "<tr>\n" +
+                            "                                        <th scope=\"row\">"+ ((pn - 1)* 10 + (i + 1))+"</th>\n" +
+                            "                                        <td><a href='/yui/post/blog/" + d.data.list[i].id + "'>"+d.data.list[i].title+"</a></td>\n" +
+                            "                                        <td>"+new Date(d.data.list[i].date).toLocaleString("en-US", {hour12: false})+"</td>\n" +
+                            "                                        <td>"+d.data.list[i].getNum + '/' + d.data.list[i].allNum +"</td>\n" +
+                            "                                    </tr>"
+                        $(".table-pay").find("tbody").append(eleTr);
+                    }
+
+                },
+                dataType:"json"
+            });
+        }
         function f1(pn) {
             console.log("博客部分");
             //清空数据
@@ -440,7 +512,7 @@
             var params = {
                 pn:pn,
                 pnSize:10,
-                id:${current_id}
+                id:${current_id} /* 用户id */
             };
             $.ajax({
                 url:"/user/f1",
@@ -467,7 +539,7 @@
                         //创建元素
                         var eleTr = "<tr>\n" +
                             "                                        <th scope=\"row\">"+ ((pn - 1)* 10 + (i + 1))+"</th>\n" +
-                            "                                        <td>"+d.data.list[i].title+"</td>\n" +
+                            "                                        <td><a href='/post/blog/" + d.data.list[i].id + "'>"+d.data.list[i].title+"</a></td>\n" +
                             "                                        <td>"+new Date(d.data.list[i].created).toLocaleString("en-US", {hour12: false})+"</td>\n" +
                             "                                        <td>"+d.data.list[i].viewCount+"</td>\n" +
                             "                                    </tr>"

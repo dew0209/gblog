@@ -7,12 +7,11 @@ import com.example.gblog.bean.User;
 import com.example.gblog.bean.Visitor;
 import com.example.gblog.common.lang.Result;
 import com.example.gblog.factorybean.SimpleEmailFactory;
-import com.example.gblog.service.NumService;
-import com.example.gblog.service.PostService;
-import com.example.gblog.service.UserService;
-import com.example.gblog.service.VisitorService;
+import com.example.gblog.service.*;
 import com.example.gblog.util.RedisUtil;
+import com.example.gblog.vo.CollVo;
 import com.example.gblog.vo.PageVo;
+import com.example.gblog.vo.PayPostVo;
 import com.example.gblog.vo.RegisterVo;
 import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +57,8 @@ public class UserController {
     VisitorService visitorService;
     @Autowired
     PostService postService;
+    @Autowired
+    PayPostService payPostService;
 
 
 
@@ -193,6 +194,28 @@ public class UserController {
     public Result f1(Integer pn,Integer pnSize,Integer id){
         PageVo<Post> res = postService.getPostByIdAnStaus(pn,pnSize,id);
         return Result.success(res);
+    }
+
+    /**
+     *
+     * @param pn  第几页
+     * @param pnSize  页大小
+     * @param id    用户id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/f2")
+    public Result f2(Integer pn,Integer pnSize,Integer id){
+        //查付费 无论status的状态
+        PageVo<PayPostVo> list = payPostService.getByUserId(id,pn,pnSize);
+        return Result.success(list);
+    }
+    @ResponseBody
+    @RequestMapping("/f3")
+    public Result f3(Integer pn,Integer pnSize,Integer id){
+        //查付费 无论status的状态
+        PageVo<CollVo> list = payPostService.getColl(id,pn,pnSize);
+        return Result.success(list);
     }
 
 }

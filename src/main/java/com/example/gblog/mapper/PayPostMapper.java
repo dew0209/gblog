@@ -2,6 +2,8 @@ package com.example.gblog.mapper;
 
 import com.example.gblog.bean.Post;
 import com.example.gblog.vo.BlogListVo;
+import com.example.gblog.vo.CollVo;
+import com.example.gblog.vo.PayPostVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -20,4 +22,12 @@ public interface PayPostMapper {
     void update(@Param("post") Post newPost);
 
     void del(@Param("id") Integer id);
+
+    List<PayPostVo> getByUserId(@Param("userId") Integer id,@Param("st")Integer i,@Param("size")Integer size);
+
+    int getTotalPayByUserId(@Param("userId") Integer userId);
+
+    List<CollVo> getColl(@Param("userId") Integer id,@Param("st") Integer pn,@Param("size") Integer pnSize);
+
+    int getTotalColl(@Param("userId") Integer id);
 }
