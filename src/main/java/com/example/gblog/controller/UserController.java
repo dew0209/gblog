@@ -148,8 +148,8 @@ public class UserController {
                 return Result.fail("用户认证失败");
             }
         }
-
-        return Result.success().action("/");
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        return Result.success(user).action("/");
     }
     /*
     * 退出

@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/nav.css">
         <link rel="stylesheet" href="/css/loginSection.css">
+        <link rel="stylesheet" href="/css/chat.css">
         <link rel="stylesheet" href="/editormd/examples/css/style.css" />
         <link rel="stylesheet" href="/editormd/css/editormd.preview.css" />
         <link rel="stylesheet" href="/editormd/css/editormd.css" />
@@ -130,6 +131,149 @@
             <div id="bg" class="login-bg"></div>
         </section>
         <#nested>
+        <section>
+            <div class="chat-header">
+                <a href="javascript:;" id="chat-link">
+                    <img src="/images/chat.png" alt="">
+                </a>
+            </div>
+            <div class="chat-fa" id="chat-fa">
+                <div id="chat-title" class="chat-colse" style="position:relative;">
+                    <span>chat</span>
+                    <span style="position: absolute;right: 0"><a id="chat-closeBtn" href="javascript:void(0);" class="close-btn">关闭</a></span>
+                </div>
+                <div class="chat-people">
+                    <div class="chat-mess">
+                        <div class="chat-avatar" style="float:left;">
+                            <img class="chat-avatar-img" src="/images/yui.png" alt="">
+                        </div>
+                        <div class="chat-name">godx</div>
+                        <div class="chat-sign">太难了啊</div>
+                    </div>
+                    <div class="chat-lianxiren">
+                        <ul class="list-group">
+                            <li class="list-group-item chat-click">
+                                <img src="/images/yui.png" alt="">
+                                <span style="margin-left: 10px">张三</span>
+                            </li>
+                            <li class="list-group-item chat-click">
+                                <img src="images/yui.png" alt="">
+                                <span style="margin-left: 10px">李四</span>
+                            </li>
+                            <li class="list-group-item chat-click">
+                                <img src="images/yui.png" alt="">
+                                <span style="margin-left: 10px">王二</span>
+                            </li>
+                            <li class="list-group-item chat-click">
+                                <img src="images/yui.png" alt="">
+                                <span style="margin-left: 10px">赵虎</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="chat-index">
+
+                    <div class="chat-body">
+                        <ul class="list-group">
+                            <li class="list-group-item chat-show">
+                                <div class="show-area">张三的会话内容</div>
+                                <textarea class="form-control" rows="3"></textarea>
+                                <button type="button" class="btn btn-info">发送</button>
+                            </li>
+                            <li class="list-group-item chat-show">
+                                <div class="show-area">李四的会话内容</div>
+                                <textarea class="form-control" rows="3"></textarea>
+                                <button type="button" class="btn btn-info">发送</button>
+                            </li>
+                            <li class="list-group-item chat-show">
+                                <div class="show-area">王二的会话内容</div>
+                                <textarea class="form-control" rows="3"></textarea>
+                                <button type="button" class="btn btn-info">发送</button>
+                            </li>
+                            <li class="list-group-item chat-show">
+                                <div class="show-area">赵虎的会话内容</div>
+                                <textarea class="form-control" rows="3"></textarea>
+                                <button type="button" class="btn btn-info">发送</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(function () {
+                    $.ajax({
+                        url:"/chat/show",
+                        type:"post",
+                        data:"",
+                        success:function (d) {
+                            console.log(d);
+                            $(".chat-name").html(d.data.username);
+                            $(".chat-avatar-img").attr("src",d.data.avatar);
+                            $(".chat-sign").html(d.data.sign);
+                            //已经成功进入，开始联系人列表
+                            var str = sessionStorage.getItem("user_" + d.data.id);
+                            var str_mess = sessionStorage.getItem("user_mess_" + d.data.id);
+                            $(".chat-lianxiren").find(".list-group").empty();
+                            $(".chat-body").find(".list-group").empty();
+                            $(".chat-lianxiren").find(".list-group").append(str);
+                            $(".chat-body").find(".list-group").append(str_mess);
+                            $(".chat-click").each(function (index,value) {
+                                console.log(value);
+                                $(value).click(function () {
+                                    console.log(value);
+                                    $(".chat-show").each(function (j,val) {
+                                        console.log($(val).css("display"));
+                                        if(index != j){
+                                            $(val).css("display","none");
+                                        }else {
+                                            $(val).css("display","block");
+                                        }
+                                    })
+                                })
+                            });
+                        },
+                        dataType:"json"
+                    });
+                })
+                var chatFa = document.querySelector('.chat-fa');
+                var chatLink = document.querySelector('#chat-link');
+                var chatCloseBtn = document.querySelector('#chat-closeBtn');
+                var chatTitle = document.querySelector('#chat-title');
+                chatLink.addEventListener('click',function () {
+                    chatFa.style.display = 'block';
+                    chatF1();
+                });
+                chatCloseBtn.addEventListener('click',function () {
+                    chatFa.style.display = 'none';
+                });
+                chatTitle.addEventListener('mousedown',function (e) {
+                    var x = e.pageX - chatFa.offsetLeft;
+                    var y = e.pageY - chatFa.offsetTop;
+                    function move(e) {
+                        chatFa.style.left = e.pageX - x + 'px';
+                        chatFa.style.top = e.pageY - y + 'px';
+                    }
+                    document.addEventListener('mousemove',move);
+                    document.addEventListener('mouseup',function (e) {
+                        document.removeEventListener('mousemove',move);
+                    });
+                });
+                $(".chat-click").each(function (index,value) {
+
+                    $(value).click(function () {
+                        console.log(value);
+                        $(".chat-show").each(function (j,val) {
+                            console.log($(val).css("display"));
+                            if(index != j){
+                                $(val).css("display","none");
+                            }else {
+                                $(val).css("display","block");
+                            }
+                        })
+                    })
+                });
+            </script>
+        </section>
     </body>
     </html>
 

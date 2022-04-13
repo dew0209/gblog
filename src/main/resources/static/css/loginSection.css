@@ -190,3 +190,9 @@ input:focus {
     margin: 0!important;
     padding: 0!important;
 }
+
+.btn-info {
+    color: #fff;
+    background: #5bc0de!important;
+    border-color: #46b8da;
+}

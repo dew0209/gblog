@@ -124,7 +124,13 @@ $(function () {
                     $("#login-error--message").html(d.msg);
                     return;
                 }
+                console.log("登录" + d);
+                console.log(d);
+                sessionStorage.setItem("user_" + d.data.id," ");
+                sessionStorage.setItem("user_mess_" + d.data.id," ");
+                console.log($(".chat-name"));
                 location.reload();
+                chatF1();
             },
             dataType:"json"
         })

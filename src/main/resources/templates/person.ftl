@@ -18,12 +18,101 @@
                         <div><span>阅读量：</span> ${nums.readingNum} </div>
                         <#--<div><span>粉丝数：</span> ${nums.fansNum} </div>-->
                         <div style="text-align: right">
-                            <#--<#if current_user.status = 1>
-                                在线
-                            </#if>
-                            <#if current_user.status != 1>
-                                离线
-                            </#if>-->
+                            <button type="button" class="btn btn-info send-mess">发消息</button>
+                            <script>
+                                //创建websocket对象
+                                var ws = new WebSocket('ws://localhost:8080/chatLJ');
+                                //websocket交互
+                                //建立连接后触发
+                                ws.onopen = function () {
+                                    console.log("建立连结");
+                                };
+
+                                //接收到服务端的推送后触发
+                                ws.onmessage = function (evt) {
+                                    console.log(evt);
+                                };
+                                //关闭连接触发
+                                ws.onclose = function () {};
+                                function sendMess(a,obj){
+                                    //发送数据给服务端
+                                    var sendJson = {"toId": a, "message": $(obj).parent().find("textarea").val()};
+                                    ws.send(JSON.stringify(sendJson));
+                                }
+                                $(function () {
+                                    $(".send-mess").click(function () {
+                                        //
+                                        var params ={
+                                            id:${current_user.id}
+                                        }
+                                        var url = "/chat/mess";
+                                        $.ajax({
+                                            url:url,
+                                            type:"post",
+                                            data:params,
+                                            success:function (d) {
+                                                console.log(d);
+                                                //需要当前用户的信息和登录用户的信息
+                                                //userId,toUserId,聊天对象的头像地址
+                                                var str = sessionStorage.getItem("user_" + d.data.userId);
+                                                var str_mess = sessionStorage.getItem("user_mess_" + d.data.userId);
+                                                //拼接
+                                                console.log(str)
+                                                console.log(str_mess)
+                                                if(str == null){
+                                                    str = "<li class=\"list-group-item chat-click\">\n" +
+                                                        "                                <img src=\""+d.data.avatar+"\" alt=\"\">\n" +
+                                                        "                                <span style=\"margin-left: 10px\">"+ d.data.toUserName +"</span>\n" +
+                                                        "                            </li>";
+                                                    str_mess = "<li class=\"list-group-item chat-show\">\n" +
+                                                        "                                <div class=\"show-area\"></div>\n" +
+                                                        "                                <textarea class=\"form-control\" rows=\"3\"></textarea>\n" +
+                                                        "                                <button type=\"button\" class=\"btn btn-info\" onclick='sendMess("+d.data.toUserId+",this)'>发送</button>\n" +
+                                                        "                            </li>";
+                                                }else {
+                                                    str += "<li class=\"list-group-item chat-click\">\n" +
+                                                        "                                <img src=\""+d.data.avatar+"\" alt=\"\">\n" +
+                                                        "                                <span style=\"margin-left: 10px\">"+ d.data.toUserName +"</span>\n" +
+                                                        "                            </li>";
+                                                    str_mess += "<li class=\"list-group-item chat-show\">\n" +
+                                                        "                                <div class=\"show-area\"></div>\n" +
+                                                        "                                <textarea class=\"form-control\" rows=\"3\"></textarea>\n" +
+                                                        "                                <button type=\"button\" class=\"btn btn-info\" onclick='sendMess("+d.data.toUserId+",this)'>发送</button>\n" +
+                                                        "                            </li>";
+                                                }
+                                                sessionStorage.setItem("user_" + d.data.userId,str);
+                                                sessionStorage.setItem("user_mess_" + d.data.userId,str_mess);
+                                                var str = sessionStorage.getItem("user_" + d.data.userId);
+                                                var str_mess = sessionStorage.getItem("user_mess_" + d.data.userId);
+                                                $(".chat-lianxiren").find(".list-group").empty();
+                                                $(".chat-body").find(".list-group").empty();
+                                                $(".chat-lianxiren").find(".list-group").append(str);
+                                                $(".chat-body").find(".list-group").append(str_mess);
+                                                $(".chat-click").each(function (index,value) {
+                                                    console.log(value);
+                                                    $(value).click(function () {
+                                                        console.log(value);
+                                                        $(".chat-show").each(function (j,val) {
+                                                            console.log($(val).css("display"));
+                                                            if(index != j){
+                                                                $(val).css("display","none");
+                                                            }else {
+                                                                $(val).css("display","block");
+                                                                /* 正确的tab切换 */
+                                                                //获取聊天记录？ 等会在写，
+                                                            }
+                                                        })
+                                                    })
+                                                });
+                                                console.log("启动聊天页面")
+                                                console.log(document.querySelector('.chat-fa'));
+                                                document.querySelector('.chat-fa').style.display = 'block';
+                                            },
+                                            dataType:"json"
+                                        })
+                                    });
+                                })
+                            </script>
                         </div>
                     </li>
                     <li class="list-group-item p-in-fa" style="width: 140px;height: 140px">
