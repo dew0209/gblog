@@ -65,7 +65,7 @@
                                     <li><a href="/info/<@shiro.principal property="id"/>" class="blackC">个人信息</a></li>
                                     <!-- divider会出现分割线 -->
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="/order/<@shiro.principal property="id"/>" class="blackC">我的订单</a></li>
+
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/user/logout" class="blackC">退出</a></li>
                                 </ul>
@@ -134,7 +134,9 @@
         <section>
             <div class="chat-header">
                 <a href="javascript:;" id="chat-link">
-                    <img src="/images/chat.png" alt="">
+                    <span class="badge" style="display: none">0</span>
+                    <img src="/images/chat.png" style="margin-bottom: 10px">
+
                 </a>
             </div>
             <div class="chat-fa" id="chat-fa">
@@ -147,27 +149,12 @@
                         <div class="chat-avatar" style="float:left;">
                             <img class="chat-avatar-img" src="/images/yui.png" alt="">
                         </div>
-                        <div class="chat-name">godx</div>
-                        <div class="chat-sign">太难了啊</div>
+                        <div class="chat-name"></div>
+                        <div class="chat-sign"></div>
                     </div>
                     <div class="chat-lianxiren">
                         <ul class="list-group">
-                            <li class="list-group-item chat-click">
-                                <img src="/images/yui.png" alt="">
-                                <span style="margin-left: 10px">张三</span>
-                            </li>
-                            <li class="list-group-item chat-click">
-                                <img src="images/yui.png" alt="">
-                                <span style="margin-left: 10px">李四</span>
-                            </li>
-                            <li class="list-group-item chat-click">
-                                <img src="images/yui.png" alt="">
-                                <span style="margin-left: 10px">王二</span>
-                            </li>
-                            <li class="list-group-item chat-click">
-                                <img src="images/yui.png" alt="">
-                                <span style="margin-left: 10px">赵虎</span>
-                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -175,26 +162,7 @@
 
                     <div class="chat-body">
                         <ul class="list-group">
-                            <li class="list-group-item chat-show">
-                                <div class="show-area">张三的会话内容</div>
-                                <textarea class="form-control" rows="3"></textarea>
-                                <button type="button" class="btn btn-info">发送</button>
-                            </li>
-                            <li class="list-group-item chat-show">
-                                <div class="show-area">李四的会话内容</div>
-                                <textarea class="form-control" rows="3"></textarea>
-                                <button type="button" class="btn btn-info">发送</button>
-                            </li>
-                            <li class="list-group-item chat-show">
-                                <div class="show-area">王二的会话内容</div>
-                                <textarea class="form-control" rows="3"></textarea>
-                                <button type="button" class="btn btn-info">发送</button>
-                            </li>
-                            <li class="list-group-item chat-show">
-                                <div class="show-area">赵虎的会话内容</div>
-                                <textarea class="form-control" rows="3"></textarea>
-                                <button type="button" class="btn btn-info">发送</button>
-                            </li>
+
                         </ul>
                     </div>
                 </div>

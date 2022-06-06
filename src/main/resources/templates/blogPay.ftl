@@ -6,10 +6,12 @@
         <div class="body-part-1">Enjoy Blog</div>
         <hr>
         <div>
-            <div class="form-group body-part-2">
-                <input type="text" class="form-control " placeholder="搜索您想要的">
-            </div>
-            <button type="submit" class="btn btn-info body-part-3">搜索</button>
+            <form action="/yui/1" method="post">
+                <div class="form-group body-part-2">
+                    <input name="key" value="${keyValue!""}" type="text" class="form-control body-part-3-in" placeholder="搜索您想要的">
+                </div>
+                <button type="submit"  class="btn btn-info body-part-3">搜索</button>
+            </form>
             <div align="right">
                 <!-- 书写博客的按钮 -->
                 <a href="/yui/write">
@@ -58,10 +60,10 @@
                     <#if res.totalPage != 0>
                         <#list 1..res.totalPage as i>
                             <#if i == res.currPage>
-                                <li class="active"><a href="/yui/${i}">${i}</a></li>
+                                <li class="active"><a href="/yui/${i}?key=${keyValue!""}">${i}</a></li>
                             </#if>
                             <#if i != res.currPage>
-                                <li class=""><a href="/yui/${i}">${i}</a></li>
+                                <li class=""><a href="/yui/${i}?key=${keyValue!""}">${i}</a></li>
                             </#if>
                         </#list>
                     </#if>

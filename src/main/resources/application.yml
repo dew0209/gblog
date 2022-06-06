@@ -8,5 +8,11 @@ spring:
     url: jdbc:mysql:///xblog?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: "020922"
+  servlet:
+    multipart:
+      max-file-size: 15MB
 mybatis:
   mapper-locations: classpath*:/mapper/**Mapper.xml
+
+upload: D:/workspace/workspaceideaj/gblog/upload/
+uplodRul: /upload/

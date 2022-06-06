@@ -18,7 +18,7 @@ public class SimpleEmailFactory {
         simpleEmail.setHostName("smtp.qq.com");
         simpleEmail.setCharset("utf-8");
         simpleEmail.setFrom(Const.EMAIL);
-        simpleEmail.setAuthenticator(new DefaultAuthenticator(Const.EMAIL,"yvqqfkqvfxrhhhhh"));
+        simpleEmail.setAuthenticator(new DefaultAuthenticator(Const.EMAIL,"ebdypxafugcnibaf"));
         simpleEmail.setSSLOnConnect(true);
         simpleEmail.setSubject("离客验证码");
         return simpleEmail;

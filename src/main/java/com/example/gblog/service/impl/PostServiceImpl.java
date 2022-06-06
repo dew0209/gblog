@@ -65,19 +65,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PageVo<BlogListVo> getPostNoPay(Integer pn, Integer size) {
+    public PageVo<BlogListVo> getPostNoPay(Integer pn, Integer size,String key) {
         PageVo<BlogListVo> res = new PageVo<>();
         res.setCurrPage(pn);
         res.setPageSize(size);
         //获得总数
-        res.setTotalCount(getTotalNoPay());
-        res.setList(postMapper.getPostNoPay((pn - 1) * size,size));
+        res.setTotalCount(getTotalNoPay(key));
+        res.setList(postMapper.getPostNoPay((pn - 1) * size,size,key));
 
         return res;
     }
 
     @Override
-    public void addBlogNoPay(String title, String content, String keywords) {
+    public Integer addBlogNoPay(String title, String content, String keywords) {
         //普通博客的添加操作
         //页面传给我们标题，内容，关键字
         //我们需要用户id，type=1，status=0，created=now(),lastmd=now(),三个访问为0，介绍为null
@@ -107,6 +107,7 @@ public class PostServiceImpl implements PostService {
         newPost.setIntroduce(null);
         //type=1,userId=profile.getId()
         postMapper.addBlogNoPay(newPost,1,profile.getId());
+        return newPost.getId();
     }
 
     @Override
@@ -152,8 +153,8 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    private int getTotalNoPay() {
-        return postMapper.getTotalNoPay();
+    private int getTotalNoPay(String key) {
+        return postMapper.getTotalNoPay(key);
     }
 
     private int getTotalByStatus(Integer id,Integer status) {

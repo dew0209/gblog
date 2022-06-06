@@ -19,6 +19,7 @@ import java.util.Date;
 
 @Data
 public class User {
+
     //主键id
     private Integer id;
     //用户名

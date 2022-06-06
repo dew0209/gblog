@@ -44,8 +44,47 @@
     <select id="hasEmail" resultType="java.lang.Integer">
         select count(1) from x_user where email = #{email};
     </select>
+    <select id="getByIdAndPass" resultType="java.lang.Integer">
+        select count(1) from x_user where id = #{id} and password = #{olPass}
+    </select>
+    <select id="getBlSt" resultType="java.lang.Integer">
+        select s1 from x_user where id = #{id};
+    </select>
+    <select id="getBlNoPay" resultType="java.lang.Integer">
+        select s2 from x_user where id = #{id};
+    </select>
+    <select id="getBlogPay" resultType="java.lang.Integer">
+        select s3 from x_user where id = #{id};
+    </select>
     <!-- 更新用户的登录状态 -->
     <update id="updateStatus">
         update x_user set status = #{code} where email = #{email}
+    </update>
+    <update id="updateAvatar">
+        update x_user set avatar = #{avatar} where id = #{userId}
+    </update>
+    <update id="setNePass">
+        update x_user set password = #{pass} where id = #{id}
+    </update>
+    <update id="setNeBase">
+        update x_user set username = #{username},sign = #{sign} where id = #{id}
+    </update>
+    <update id="setS1">
+        update x_user set s1 = 1 where id = #{id}
+    </update>
+    <update id="setS2">
+        update x_user set s2 = 1 where id = #{id}
+    </update>
+    <update id="setS3">
+        update x_user set s3 = 1 where id = #{id}
+    </update>
+    <update id="setu1">
+        update x_user set s1 = 0 where id = #{id}
+    </update>
+    <update id="setu2">
+        update x_user set s2 = 0 where id = #{id}
+    </update>
+    <update id="setu3">
+        update x_user set s3 = 0 where id = #{id}
     </update>
 </mapper>

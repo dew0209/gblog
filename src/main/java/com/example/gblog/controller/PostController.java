@@ -3,10 +3,7 @@ package com.example.gblog.controller;
 import com.example.gblog.bean.Post;
 import com.example.gblog.bean.User;
 import com.example.gblog.common.lang.Result;
-import com.example.gblog.service.CollService;
-import com.example.gblog.service.CommentService;
-import com.example.gblog.service.LoveService;
-import com.example.gblog.service.PostService;
+import com.example.gblog.service.*;
 import com.example.gblog.vo.BlogListVo;
 import com.example.gblog.vo.CommentVo;
 import com.example.gblog.vo.PageVo;
@@ -32,15 +29,24 @@ public class PostController {
     LoveService loveService;
     @Autowired
     CollService collService;
-    @GetMapping("/{id}")
-    public String index(@PathVariable(value = "id",required = false)Integer pn, HttpServletRequest request){
+    @Autowired
+    UserService userService;
+
+    @RequestMapping("/{id}")
+    public String index(@PathVariable(value = "id",required = false)Integer pn, HttpServletRequest request,String key){
         if(pn == null)pn = 1;
-        PageVo<BlogListVo> res = postService.getPostNoPay(pn,20);
+        PageVo<BlogListVo> res = postService.getPostNoPay(pn,20,key);
         request.setAttribute("res",res);
+        request.setAttribute("keyValue",key);
         return "blog";
     }
     @GetMapping("/write")
     public String write(){
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        //检查权限
+        if(user == null)return "/post/1";
+        Integer blNoPay = userService.getBlNoPay(user.getId());
+        if(blNoPay == 1)return "/post/1";
         return "write";
     }
 
@@ -51,8 +57,8 @@ public class PostController {
         if(title == null || "".equals(title))return Result.fail("标题不能为空");
         if(content == null || "".equals(content))return Result.fail("内容不能为空");
         if(keywords == null || "".equals(keywords))return Result.fail("关键字不能为空");
-        postService.addBlogNoPay(title,content,keywords);
-        return Result.success();
+        Integer id = postService.addBlogNoPay(title,content,keywords);
+        return Result.success().action("/post/blog/" + id);
     }
     //获得具体的博客
     @GetMapping("/blog/{id}")
@@ -119,6 +125,11 @@ public class PostController {
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
         if(user == null)return "eroor";
         Integer userId = user.getId();
+        if(user.getId() == 7){
+            //管理员删除
+            postService.del(id);
+            return "/post/1";
+        }
         if (userId != post.getUser().getId())return "error";
         postService.del(id);
         return "/post/1";

@@ -44,6 +44,8 @@ public class PayPostController {
     LoveService loveService;
     @Autowired
     CollService collService;
+    @Autowired
+    UserService userService;
     @ResponseBody
     @PostMapping("/add")
     public Result add(String title,String content,String keywords,Integer price,String introduce){
@@ -68,20 +70,26 @@ public class PayPostController {
         newPost.setIntroduce(introduce);
         //type=1,userId=profile.getId()
         payPostService.add(newPost);
-        return Result.success();
+        return Result.success().action("/yui/post/blog/" + newPost.getId());
     }
 
 
     @RequestMapping("/write")
     public String write(){
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        //检查权限
+        if(user == null)return "/yui/1";
+        Integer blNoPay = userService.getBlogPay(user.getId());
+        if(blNoPay == 1)return "/yui/1";
         return "writePay";
     }
     //获取所有的付费博客
-    @GetMapping("/{id}")
-    public String index(@PathVariable(value = "id",required = false)Integer pn, HttpServletRequest request){
+    @RequestMapping("/{id}")
+    public String index(@PathVariable(value = "id",required = false)Integer pn, HttpServletRequest request,String key){
         if(pn == null)pn = 1;
-        PageVo<BlogListVo> res = payPostService.getPostPay(pn,20);
+        PageVo<BlogListVo> res = payPostService.getPostPay(pn,20,key);
         request.setAttribute("res",res);
+        request.setAttribute("keyValue",key);
         return "blogPay";
     }
     @ResponseBody
@@ -100,7 +108,8 @@ public class PayPostController {
         System.out.println(postId +"===" + price);
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipaydev.com/gateway.do","2021000119660061",str,"json","utf-8",str1,"RSA2");
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
-        String tradeNo = System.currentTimeMillis() + "";
+
+        String tradeNo = res != null ? res.getOrderId() : (System.currentTimeMillis() + "");
         System.out.println(tradeNo);
         String body = "";
         request.setBizContent("{\"out_trade_no\":\""+ tradeNo +"\","
@@ -189,9 +198,26 @@ public class PayPostController {
         if(user == null)return "error";
         Integer userId = user.getId();
         Post byId = payPostService.getById(id);
+        if(user.getId() == 7){
+            //管理员删除
+            payPostService.del(id);
+            return "/post/1";
+        }
         if(byId.getUser().getId() != userId)return "error";
         payPostService.del(id);
         return "redirect:/yui/1";
+    }
+
+    //计算收益
+    @ResponseBody
+    @RequestMapping("/getMon")
+    public Result getMon(String par){
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        //if(user == null)return "error";
+        if(user == null)return Result.fail("未登录！！！");
+        Integer userId = user.getId();
+        payPostService.caclMon(userId,par);
+        return Result.success();
     }
 
 }

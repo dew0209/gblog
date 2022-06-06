@@ -11,9 +11,9 @@ import java.util.List;
 
 @Component
 public interface PayPostMapper {
-    List<BlogListVo> getPostPay(@Param("st") int i,@Param("size") Integer size);
+    List<BlogListVo> getPostPay(@Param("st") int i,@Param("size") Integer size,String key);
 
-    int getTotalPay();
+    int getTotalPay(@Param("key") String key);
 
     Post getById(@Param("id") Integer id);
 
@@ -30,4 +30,16 @@ public interface PayPostMapper {
     List<CollVo> getColl(@Param("userId") Integer id,@Param("st") Integer pn,@Param("size") Integer pnSize);
 
     int getTotalColl(@Param("userId") Integer id);
+
+    List<CollVo> getCollAll(@Param("userId") Integer id,@Param("st") Integer pn,@Param("size") Integer pnSize);
+
+    int getTotalCollAll(@Param("id") Integer id);
+
+    List<PayPostVo> getByUserIdNoPay(@Param("userId") Integer userId);
+
+    int isOrderExists(@Param("userId") Integer userId);
+
+    void updateById(@Param("userId") Integer userId,@Param("price") String s,@Param("par")String par);
+
+    void insert(@Param("userId") Integer userId,@Param("price") String s,@Param("par")String par);
 }

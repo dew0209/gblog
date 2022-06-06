@@ -19,10 +19,12 @@ import org.apache.commons.mail.SimpleEmail;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /*
@@ -60,6 +62,8 @@ public class UserController {
     @Autowired
     PayPostService payPostService;
 
+    @Value("${upload}")
+    String path;
 
 
     /**
@@ -133,7 +137,7 @@ public class UserController {
     * */
     @ResponseBody
     @PostMapping("/login")
-    public Result verify(String email,String password){
+    public Result verify(String email, String password, HttpSession session){
         UsernamePasswordToken token = new UsernamePasswordToken(email, SecureUtil.md5(password));
         try{
             SecurityUtils.getSubject().login(token);
@@ -149,6 +153,10 @@ public class UserController {
             }
         }
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        session.setAttribute("userId",user.getId() + "");
+        Integer blSt = userService.getBlSt(user.getId());
+        //如果在线，怎么干掉
+        if(blSt == 1)return Result.fail("用户被禁用");
         return Result.success(user).action("/");
     }
     /*
@@ -172,6 +180,27 @@ public class UserController {
         //从总阅读表获取数据
         Num nums = numService.getNumByUserId(id);
         request.setAttribute("nums",nums);
+        //管理员处理
+        User suadmin = (User) SecurityUtils.getSubject().getSession().getAttribute("profile");
+        if(suadmin != null && suadmin.getId() == 7){
+            //设置状态
+            request.setAttribute("blogSt",userService.getBlSt(id));
+            //设置博客
+            request.setAttribute("blogNopay",userService.getBlNoPay(id));
+            //设置付费
+            request.setAttribute("blogPay",userService.getBlogPay(id));
+        }
+        //当前用户是不是这个所查询的用户
+        if(suadmin != null){
+            if(suadmin.getId() == id){
+                request.setAttribute("isOwen",2);
+            }else {
+                request.setAttribute("isOwen",1);
+            }
+        }else {
+            request.setAttribute("isOwen",1);
+
+        }
         //获取最近9个访问者
         List<Visitor> visitors = visitorService.getByUserId(id);
         request.setAttribute("visitors",visitors);
@@ -217,5 +246,43 @@ public class UserController {
         PageVo<CollVo> list = payPostService.getColl(id,pn,pnSize);
         return Result.success(list);
     }
+    @ResponseBody
+    @RequestMapping("/f4")
+    public Result f4(Integer pn,Integer pnSize,Integer id){
+        //查订单 无论status的状态
+        PageVo<CollVo> list = payPostService.getCollOrder(id,pn,pnSize);
+        return Result.success(list);
+    }
 
+
+    @RequestMapping("/s1")
+    public String s1(Integer id){
+        userService.stS1(id);
+        return "redirect:/user/" + id;
+    }
+    @RequestMapping("/s2")
+    public String s2(Integer id){
+        userService.stS2(id);
+        return "redirect:/user/" + id;
+    }
+    @RequestMapping("/s3")
+    public String s3(Integer id){
+        userService.stS3(id);
+        return "redirect:/user/" + id;
+    }
+    @RequestMapping("/u1")
+    public String u1(Integer id){
+        userService.stu1(id);
+        return "redirect:/user/" + id;
+    }
+    @RequestMapping("/u2")
+    public String u2(Integer id){
+        userService.stu2(id);
+        return "redirect:/user/" + id;
+    }
+    @RequestMapping("/u3")
+    public String u3(Integer id){
+        userService.stu3(id);
+        return "redirect:/user/" + id;
+    }
 }

@@ -46,4 +46,46 @@ public class UserServiceImpl implements UserService {
     public User getById(Integer id) {
         return userMapper.getById(id);
     }
+
+    @Override
+    public Integer getBlSt(Integer id) {
+        return userMapper.getBlSt(id);
+    }
+
+    @Override
+    public Integer getBlNoPay(Integer id) {
+        return userMapper.getBlNoPay(id);
+    }
+
+    @Override
+    public Integer getBlogPay(Integer id) {
+        return userMapper.getBlogPay(id);
+    }
+
+    @Override
+    public void stS1(Integer id) {
+        userMapper.setS1(id);
+    }
+
+    @Override
+    public void stS2(Integer id) {
+        userMapper.setS2(id);
+    }
+    @Override
+    public void stS3(Integer id) {
+        userMapper.setS3(id);
+    }
+
+    @Override
+    public void stu1(Integer id) {
+        userMapper.setu1(id);
+    }
+    @Override
+    public void stu2(Integer id) {
+        userMapper.setu2(id);
+    }
+    @Override
+    public void stu3(Integer id) {
+        userMapper.setu3(id);
+    }
 }

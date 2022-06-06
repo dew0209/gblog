@@ -9,7 +9,7 @@ import com.example.gblog.vo.PayPostVo;
 import java.util.List;
 
 public interface PayPostService {
-    PageVo<BlogListVo> getPostPay(Integer pn, Integer size);
+    PageVo<BlogListVo> getPostPay(Integer pn, Integer size,String key);
 
     Post getById(Integer id);
 
@@ -22,4 +22,8 @@ public interface PayPostService {
     PageVo<PayPostVo> getByUserId(Integer userId,Integer pn,Integer pnSize);
 
     PageVo<CollVo> getColl(Integer id, Integer pn, Integer pnSize);
+
+    PageVo<CollVo> getCollOrder(Integer id, Integer pn, Integer pnSize);
+
+    void caclMon(Integer userId,String par);
 }

@@ -27,7 +27,7 @@
         <result property="created" column="created" />
         <result property="viewCount" column="viewCount" />
     </resultMap>
-    <insert id="addBlogNoPay">
+    <insert id="addBlogNoPay" useGeneratedKeys="true" keyProperty="newPost.id">
         insert into x_post values(null,#{newPost.title},#{userId},#{type},#{newPost.keywords1},#{newPost.keywords2},#{newPost.keywords3},#{newPost.price},#{newPost.content},0,now(),now(),0,0,0,null);
     </insert>
     <update id="addReviewCount">
@@ -68,10 +68,25 @@
         x_user.username as username,
         x_post.created as created,
         x_post.view_count as viewCount
-         from x_post left join x_user on x_post.user_id = x_user.id where introduce is null and type = 1 and x_post.status = 0 order by created desc limit #{st},#{size};
+         from x_post left join x_user on x_post.user_id = x_user.id where introduce is null and type = 1 and x_post.status = 0
+         <if test="key != null and key != ''">
+             and (title like concat('%',#{key},'%')
+                or keywords1 like concat('%',#{key},'%')
+                or keywords2 like concat('%',#{key},'%')
+                or keywords3 like concat('%',#{key},'%')
+             )
+         </if>
+        order by created desc limit #{st},#{size};
     </select>
     <select id="getTotalNoPay" resultType="java.lang.Integer">
-        select count(1) from x_post where type = 1;
+        select count(1) from x_post where type = 1
+        <if test="key != null and key != ''">
+            and (title like concat('%',#{key},'%')
+            or keywords1 like concat('%',#{key},'%')
+            or keywords2 like concat('%',#{key},'%')
+            or keywords3 like concat('%',#{key},'%')
+            )
+        </if>
     </select>
     <select id="getById" resultMap="baseResultMap">
         select * from x_post where id = #{id} and type = 1;

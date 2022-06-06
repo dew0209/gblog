@@ -18,9 +18,9 @@ public interface PostMapper {
 
     List<Post> getByStatusAndId(@Param("id") Integer id,@Param("status") int i,@Param("st") int i1,@Param("size") Integer pnSize);
 
-    List<BlogListVo> getPostNoPay(@Param("st") int i, @Param("size") Integer size);
+    List<BlogListVo> getPostNoPay(@Param("st") int i, @Param("size") Integer size,@Param("key") String key);
 
-    int getTotalNoPay();
+    int getTotalNoPay(@Param("key") String key);
 
     void addBlogNoPay(@Param("newPost") Post newPost, @Param("type") int i, @Param("userId") Integer id);
 

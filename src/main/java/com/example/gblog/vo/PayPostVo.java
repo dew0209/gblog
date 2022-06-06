@@ -10,6 +10,7 @@ public class PayPostVo {
     private Integer id;
     private String title;
     private Date date;
+    private String price;
     private Integer getNum;
     private Integer allNum;
 }

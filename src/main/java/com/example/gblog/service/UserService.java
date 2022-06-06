@@ -11,4 +11,17 @@ public interface UserService {
     boolean hasEmail(String email);
 
     User getById(Integer id);
+
+    Integer getBlSt(Integer id);
+
+    Integer getBlNoPay(Integer id);
+
+    Integer getBlogPay(Integer id);
+
+    void stS1(Integer id);
+    void stS2(Integer id);
+    void stS3(Integer id);
+    void stu1(Integer id);
+    void stu2(Integer id);
+    void stu3(Integer id);
 }

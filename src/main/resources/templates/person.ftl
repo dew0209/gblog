@@ -1,5 +1,15 @@
 <#include "/common/nav.ftl"/>
 <@nav "个人空间">
+    <style>
+        .aba {
+            margin-bottom: 10px;
+        }
+        .show-area {
+            width: 600px;
+            height: 260px;
+            overflow: scroll;
+        }
+    </style>
     <link rel="stylesheet" href="/css/person-message.css" />
     <section class="person-show-self">
         <div class="person-show-diff">
@@ -18,10 +28,55 @@
                         <div><span>阅读量：</span> ${nums.readingNum} </div>
                         <#--<div><span>粉丝数：</span> ${nums.fansNum} </div>-->
                         <div style="text-align: right">
+                            <@shiro.hasRole name="suadmin">
+                                <span class="delete-post">
+                                    <#-- 封禁用户 -->
+                                    <#if blogSt == 0>
+                                        <form action="/user/s1/" method="post">
+                                            <input type="hidden" name="id" width="0" height="0" value="${current_user.id}">
+                                            <button type="submit" href="" class="btn btn-info  danger-user">禁用用户</button>
+                                        </form>
+                                    </#if>
+                                    <#if blogSt != 0>
+                                        <form action="/user/u1/" method="post">
+                                            <input type="hidden" name="id" width="0" height="0" value="${current_user.id}">
+                                        <button type="submit" class="btn btn-danger  danger-user">恢复封禁</button>
+                                        </form>
+
+                                    </#if>
+                                    <#-- 禁用写博客 -->
+                                    <#if blogNopay == 0>
+                                        <form action="/user/s2/" method="post">
+                                            <input type="hidden" name="id" value="${current_user.id}">
+                                            <button type="submit"  class="btn btn-info s danger-user">禁用博客</button>
+                                        </form>
+                                    </#if>
+                                    <#if blogNopay != 0>
+                                        <form action="/user/u2/" method="post">
+                                            <input type="hidden" name="id" value="${current_user.id}">
+                                            <button type="submit"  class="btn btn-danger s danger-user">禁用博客</button>
+                                        </form>
+                                    </#if>
+                                    <#-- 禁用付费 -->
+                                    <#if blogPay == 0>
+                                        <form action="/user/s3/" method="post">
+                                            <input type="hidden" width="0" height="0" name="id" value="${current_user.id}">
+                                            <button type="submit"  class="btn btn-info  danger-user">禁用付费</button>
+                                        </form>
+                                    </#if>
+                                    <#if blogPay != 0>
+                                        <form action="/user/u3/" method="post">
+                                            <input type="hidden" width="0" height="0" name="id" value="${current_user.id}">
+                                            <button type="submit"  class="btn btn-danger  danger-user">恢复付费</button>
+                                        </form>
+                                    </#if>
+                                </span>
+                            </@shiro.hasRole>
                             <button type="button" class="btn btn-info send-mess">发消息</button>
                             <script>
-                                //创建websocket对象
-                                var ws = new WebSocket('ws://localhost:8080/chatLJ');
+
+                                var ws =  new WebSocket('ws://localhost:8080/chatLJ');
+
                                 //websocket交互
                                 //建立连接后触发
                                 ws.onopen = function () {
@@ -30,15 +85,23 @@
 
                                 //接收到服务端的推送后触发
                                 ws.onmessage = function (evt) {
-                                    console.log(evt);
+                                    console.log(evt.data);
+                                    var resJson = JSON.parse(evt.data);
+                                    console.log(resJson.fromUser)
+                                    $("div[idex-id="+resJson.fromUser+"]").append("<div align=\"left\"  class='aba'>"+resJson.message+"</div>");
+                                    $("div[idex-id="+resJson.fromUser+"]").scrollTop($("div[idex-id="+resJson.fromUser+"]").prop("scrollHeight"));
                                 };
                                 //关闭连接触发
                                 ws.onclose = function () {};
                                 function sendMess(a,obj){
                                     //发送数据给服务端
-                                    var sendJson = {"toId": a, "message": $(obj).parent().find("textarea").val()};
+                                    var sendJson = {"toId": a, "message": $(obj).parent().find("textarea").val(),id:<@shiro.principal property="id"/>};
                                     ws.send(JSON.stringify(sendJson));
+                                    $("div[idex-id="+a+"]").append("<div align=\"right\"  class='aba'>"+$(obj).parent().find("textarea").val()+"</div>");
+                                    $(obj).parent().find("textarea").val("")
+                                    $("div[idex-id="+a+"]").scrollTop($("div[idex-id="+a+"]").prop("scrollHeight"));
                                 }
+                                var okFlag = false;
                                 $(function () {
                                     $(".send-mess").click(function () {
                                         //
@@ -51,43 +114,35 @@
                                             type:"post",
                                             data:params,
                                             success:function (d) {
-                                                console.log(d);
-                                                //需要当前用户的信息和登录用户的信息
-                                                //userId,toUserId,聊天对象的头像地址
-                                                var str = sessionStorage.getItem("user_" + d.data.userId);
-                                                var str_mess = sessionStorage.getItem("user_mess_" + d.data.userId);
-                                                //拼接
-                                                console.log(str)
-                                                console.log(str_mess)
-                                                if(str == null){
-                                                    str = "<li class=\"list-group-item chat-click\">\n" +
-                                                        "                                <img src=\""+d.data.avatar+"\" alt=\"\">\n" +
-                                                        "                                <span style=\"margin-left: 10px\">"+ d.data.toUserName +"</span>\n" +
-                                                        "                            </li>";
-                                                    str_mess = "<li class=\"list-group-item chat-show\">\n" +
-                                                        "                                <div class=\"show-area\"></div>\n" +
-                                                        "                                <textarea class=\"form-control\" rows=\"3\"></textarea>\n" +
-                                                        "                                <button type=\"button\" class=\"btn btn-info\" onclick='sendMess("+d.data.toUserId+",this)'>发送</button>\n" +
-                                                        "                            </li>";
-                                                }else {
-                                                    str += "<li class=\"list-group-item chat-click\">\n" +
-                                                        "                                <img src=\""+d.data.avatar+"\" alt=\"\">\n" +
-                                                        "                                <span style=\"margin-left: 10px\">"+ d.data.toUserName +"</span>\n" +
-                                                        "                            </li>";
-                                                    str_mess += "<li class=\"list-group-item chat-show\">\n" +
-                                                        "                                <div class=\"show-area\"></div>\n" +
-                                                        "                                <textarea class=\"form-control\" rows=\"3\"></textarea>\n" +
-                                                        "                                <button type=\"button\" class=\"btn btn-info\" onclick='sendMess("+d.data.toUserId+",this)'>发送</button>\n" +
-                                                        "                            </li>";
-                                                }
-                                                sessionStorage.setItem("user_" + d.data.userId,str);
-                                                sessionStorage.setItem("user_mess_" + d.data.userId,str_mess);
-                                                var str = sessionStorage.getItem("user_" + d.data.userId);
-                                                var str_mess = sessionStorage.getItem("user_mess_" + d.data.userId);
+                                                /**
+                                                 *
+                                                 * 点发消息获取当前用户所有的会话列表
+                                                 * 点击单独的人，获取历史聊天记录，按时间排序[只展示最新五条]
+                                                 *
+                                                 *
+                                                 * */
                                                 $(".chat-lianxiren").find(".list-group").empty();
                                                 $(".chat-body").find(".list-group").empty();
-                                                $(".chat-lianxiren").find(".list-group").append(str);
-                                                $(".chat-body").find(".list-group").append(str_mess);
+                                                console.log(d);
+                                                for(var i = 0;i < d.data.length;i++){
+                                                    console.log(d.data[i].id);
+                                                    //拼接参数和聊天框
+                                                    var str = "";
+                                                    var str_mess = "";
+
+                                                    str = "<li class=\"list-group-item chat-click\">\n" +
+                                                        "                                <img src=\""+d.data[i].avatar+"\" alt=\"\">\n" +
+                                                        "                                <span style=\"margin-left: 10px\">"+ d.data[i].username +"</span>\n" +
+                                                        "                            </li>";
+                                                    str_mess = "<li class=\"list-group-item chat-show\">\n" +
+                                                        "                                <div class=\"show-area\" idex-id = '"+ d.data[i].id +"'></div>\n" +
+                                                        "                                <textarea class=\"form-control\" rows=\"3\"></textarea>\n" +
+                                                        "                                <button type=\"button\" class=\"btn btn-info\" onclick='sendMess("+d.data[i].id+",this)'>发送</button>\n" +
+                                                        "                            </li>";
+
+                                                    $(".chat-lianxiren").find(".list-group").append(str);
+                                                    $(".chat-body").find(".list-group").append(str_mess);
+                                                }
                                                 $(".chat-click").each(function (index,value) {
                                                     console.log(value);
                                                     $(value).click(function () {
@@ -99,7 +154,8 @@
                                                             }else {
                                                                 $(val).css("display","block");
                                                                 /* 正确的tab切换 */
-                                                                //获取聊天记录？ 等会在写，
+                                                                //获取聊天记录？ 等会在写，触发请求进行获取历史聊天记录
+                                                                getHisMess(val,d.data[index]);
                                                             }
                                                         })
                                                     })
@@ -111,6 +167,35 @@
                                             dataType:"json"
                                         })
                                     });
+                                    function getHisMess(val,personObj) {
+                                        //获取信息
+                                        //只获取最近十条记录
+                                        $(val).find(".show-area").empty();
+                                        console.log(val);
+                                        console.log(personObj);
+                                        var params = {
+                                          id:personObj.id
+                                        };
+                                        $.ajax({
+                                            url: "/chat/his",
+                                            type: "post",
+                                            data: params,
+                                            success: function (d) {
+                                                //获取到最近十条的聊天记录
+                                                console.log(d);
+                                                debugger
+                                                for(var i = 0;i < d.data.length;i++){
+                                                    if(d.data[i].loc == "1"){
+                                                        $(val).find(".show-area").append("<div align=\"left\" class='aba'>"+d.data[i].mess+"</div>")
+                                                    }else {
+                                                        $(val).find(".show-area").append("<div align=\"right\"  class='aba'>"+d.data[i].mess+"</div>")
+
+                                                    }
+                                                }
+
+                                            }
+                                        })
+                                    }
                                 })
                             </script>
                         </div>
@@ -134,8 +219,9 @@
                         <!-- 付费对本人和非本人有不同的区别 -->
                         <li class="item-click"><a href="#">付费</a></li>
                         <li class="item-click"><a href="#">收藏</a></li>
-                        <!-- 只对本人开放 -->
-                        <li class="item-click"><a href="#">通知</a></li>
+                        <li class="item-click"><a href="#">订单</a></li>
+
+
                     </ul>
                 </nav>
                 <div class="clear"></div>
@@ -292,7 +378,30 @@
                             </div>
 
                             <div align="right" style="margin: 5px">
-                                <button type="button" class="btn btn-info">结算收益</button>
+                                <#-- ${current_user.id} -->
+                                <#if isOwen != 1>
+                                    <button type="button" class="get-money btn btn-info">结算收益</button>
+                                    <#--
+                                        整收益的
+                                    -->
+                                    <script>
+
+                                        $(".get-money").click(function () {
+                                            var par = prompt("请输入您的支付宝账号/姓名");
+                                            console.log(par);
+                                            var params = {"par":par};
+                                            $.ajax({
+                                                url:"/yui/getMon",
+                                                type:"post",
+                                                data:params,
+                                                success:function (d) {
+                                                    alert("收到！系统将为您计算收益后转账，如需修改账号/姓名，请多次提交请求即可")
+                                                },
+                                                dataType:"json"
+                                            });
+                                        });
+                                    </script>
+                                </#if>
                             </div>
                         </li>
                         <li class="item-show">
@@ -332,7 +441,43 @@
                                 </nav>
                             </div>
                         </li>
-                        <li class="item-show">通知 内容</li>
+                        <li class="item-show">
+                            <!--
+                                类型	标题	作者	日期	阅读	删除
+                            -->
+                            <table class="table table-striped table-coll">
+                                <thead>
+                                <tr>
+                                    <th scope="row">#</th>
+                                    <th>类型</th>
+                                    <th>标题</th>
+                                    <th>作者</th>
+                                    <th>日期</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
+                            <div align="right">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination pagination-coll-fa" style="margin-right: 5px">
+                                        <li>
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="coll-pagination">
+                                            <a href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </li>
                     </ul>
 
                 </section>
@@ -454,14 +599,86 @@
                         if(index == 1)f1(1);//博客
                         if(index == 2)f2(1);//付费
                         if(index == 3)f3(1);//收藏
-                        if(index == 4)f4(1);//通知
+                        if(index == 4)f4(1);//收藏
+
                     }
                 })
             })
         });
+
         function f4(pn) {
-            console.log("通知部分");
+            console.log("订单部分");
+            //清空数据
+            $(".table-coll").find("tbody").children().remove();
+            //清空分页
+            $(".pagination-coll-fa").children(".paging-btn").remove();
+            var params = {
+                pn:pn,
+                pnSize:10,
+                id:${current_id}
+            };
+            $.ajax({
+                url:"/user/f4",
+                type:"post",
+                data:params,
+                success:function (d) {
+                    //分页等数据都在这里
+                    console.log(d);
+                    //回显分页
+                    for(var i = 1;i <= d.data.totalPage;i++){
+                        console.log("处理分页");
+                        var eleStr = "";
+                        if(i == d.data.currPage){
+                            eleStr = "<li class=\"active paging-btn\"><a href=\"JavaScript:f3("+i+")\" >"+i+"</a></li>"
+
+                        }else {
+                            eleStr = "<li class=\"paging-btn\"><a href=\"JavaScript:f3("+i+")\" >"+i+"</a></li>";
+                        }
+                        $(".coll-pagination").before(eleStr);
+                    }
+
+                    /*
+                    *
+                    *
+                    * <th scope="row">1</th>
+                                    <td>博客</td>
+                                    <td>spring学习笔记</td>
+                                    <td>godx</td>
+                                    <td>2022-04-02 10:23:00</td>
+                                    <td><a href="#">删除</a></td>
+                    * */
+                    //回显数据
+                    for(var i = 0;i < d.data.list.length;i++){
+
+                        console.log(d.data.list[i].postId);
+                        if(d.data.list[i].typeName == "博客"){
+                            //创建元素
+                            var eleTr = "<tr>\n" +
+                                "                                        <th scope=\"row\">"+ ((pn - 1)* 10 + (i + 1))+"</th>\n" +
+                                "                                        <td>"+d.data.list[i].typeName+"</td>\n" +
+                                "                                        <td><a href='/post/blog/" + d.data.list[i].postId + "'>"+d.data.list[i].title+"</a></td>\n" +
+                                "                                        <td><a href='/user/"+ d.data.list[i].userId +"'>"+d.data.list[i].username+"</a></td>\n" +
+                                "                                        <td>"+new Date(d.data.list[i].date).toLocaleString("en-US", {hour12: false})+"</td>\n" +
+                                "                                    </tr>"
+                            $(".table-coll").find("tbody").append(eleTr);
+                        }else {
+                            //创建元素
+                            var eleTr = "<tr>\n" +
+                                "                                        <th scope=\"row\">"+ ((pn - 1)* 10 + (i + 1))+"</th>\n" +
+                                "                                        <td>"+d.data.list[i].typeName+"</td>\n" +
+                                "                                        <td><a href='/yui/post/blog/" + d.data.list[i].postId + "'>"+d.data.list[i].title+"</a></td>\n" +
+                                "                                        <td><a href='/user/"+ d.data.list[i].userId +"'>"+d.data.list[i].username+"</a></td>\n" +
+                                "                                        <td>"+new Date(d.data.list[i].date).toLocaleString("en-US", {hour12: false})+"</td>\n" +
+                                "                                    </tr>"
+                            $(".table-coll").find("tbody").append(eleTr);
+                        }
+                    }
+
+                },
+                dataType:"json"
+            });
         }
+
         function f3(pn) {
             console.log("收藏部分");
             //清空数据

@@ -15,6 +15,5 @@ public class ShiroFreemarkerConfig {
     @PostConstruct
     public void setUp() {
         configuration.setSharedVariable("shiro", new ShiroTags());
-
     }
 }

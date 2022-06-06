@@ -156,6 +156,13 @@
                             <a href="/post/del/${post.id}"><span class="glyphicon glyphicon-trash"></span></a>
                         </span>
                     </@shiro.hasRole>
+                    <@shiro.hasRole name="suadmin">
+
+                    <#-- 删除 -->
+                        <span class="delete-post">
+                            <a href="/post/del/${post.id}"><span class="glyphicon glyphicon-remove"></span></a>
+                        </span>
+                    </@shiro.hasRole>
                 </@shiro.user>
 
             </div>

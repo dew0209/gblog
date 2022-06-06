@@ -53,7 +53,7 @@
                     type:"post",
                     data:params,
                     success:function (d) {
-                        alert(d.msg);
+                        location.href = "http://localhost:8080" + d.action;
                     },
                     dataType:"json"
                 })

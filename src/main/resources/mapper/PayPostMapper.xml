@@ -31,13 +31,17 @@
         <id column="id" property="id" />
         <result column="title" property="title"/>
         <result column="created" property="date" />
+        <result column="price" property="price" />
         <association property="getNum" select="com.example.gblog.mapper.OrderMapper.getNum" column="id" />
         <association property="allNum" select="com.example.gblog.mapper.OrderMapper.getAllNum" column="id" />
     </resultMap>
 
-    <insert id="add">
+    <insert id="add" useGeneratedKeys="true" keyProperty="post.id">
         insert into x_post(title,user_id,type,keywords1,keywords2,keywords3,price,content,created,lastmd,introduce)
                         values(#{post.title},#{userId},#{type},#{post.keywords1},#{post.keywords2},#{post.keywords3},#{post.price},#{post.content},now(),now(),#{post.introduce});
+    </insert>
+    <insert id="insert">
+        insert into x_mon(user_id,price,status,par) values(#{userId},#{price},0,#{par})
     </insert>
     <update id="update">
         update x_post set title = #{post.title},content = #{post.content},keywords1 = #{post.keywords1},
@@ -45,6 +49,9 @@
     </update>
     <update id="del">
         update x_post set x_post.status = 1 where id = #{id};
+    </update>
+    <update id="updateById">
+        update x_mon set price = #{price},par = #{par} where user_id = #{userId}
     </update>
     <select id="getPostPay" resultMap="baseResultMap">
        select
@@ -55,10 +62,26 @@
         x_user.username as username,
         x_post.created as created,
         x_post.view_count as viewCount
-         from x_post left join x_user on x_post.user_id = x_user.id where introduce is not null and type = 2 and x_post.status = 0 order by created desc limit #{st},#{size};
+         from x_post left join x_user on x_post.user_id = x_user.id where introduce is not null and type = 2 and x_post.status = 0
+        <if test="key != null and key != ''">
+            and (title like concat('%',#{key},'%')
+            or keywords1 like concat('%',#{key},'%')
+            or keywords2 like concat('%',#{key},'%')
+            or keywords3 like concat('%',#{key},'%')
+            )
+        </if>
+
+          order by created desc limit #{st},#{size};
     </select>
     <select id="getTotalPay" resultType="java.lang.Integer">
-        select count(1) from x_post where introduce is not null and type = 2 and x_post.status = 0;
+        select count(1) from x_post where introduce is not null and type = 2 and x_post.status = 0
+        <if test="key != null and key != ''">
+            and (title like concat('%',#{key},'%')
+            or keywords1 like concat('%',#{key},'%')
+            or keywords2 like concat('%',#{key},'%')
+            or keywords3 like concat('%',#{key},'%')
+            )
+        </if>
     </select>
     <select id="getById" resultMap="baseResultMap1">
         select * from x_post where id = #{id} and type = 2;
@@ -83,5 +106,18 @@
     </select>
     <select id="getTotalColl" resultType="java.lang.Integer">
         select count(1) from x_coll where user_id = #{userId};
+    </select>
+    <select id="getCollAll" resultType="com.example.gblog.vo.CollVo">
+        SELECT username,title,x_post.created as date,x_user.id AS userId,x_post.id AS postId,type_name AS typeName FROM x_order LEFT JOIN x_post ON x_order.post_id = x_post.id LEFT JOIN  x_user ON x_post.`user_id` = x_user.id
+        LEFT JOIN x_type ON x_type.id = x_post.`type` where x_order.user_id = #{userId} and x_order.status = 1 limit #{st},#{size};
+    </select>
+    <select id="getTotalCollAll" resultType="java.lang.Integer">
+        select count(1) from x_order where user_id = #{id} and status = 1;
+    </select>
+    <select id="getByUserIdNoPay" resultMap="baseResultMap2">
+        select * from x_post where user_id = #{userId} and type = 2;
+    </select>
+    <select id="isOrderExists" resultType="java.lang.Integer">
+        select count(1) from x_mon where user_id = #{userId} and status = 0;
     </select>
 </mapper>

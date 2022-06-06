@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.gblog.mapper.ChatMapper">
+    <resultMap id="baseMap" type="com.example.gblog.bean.HisMessage">
+        <result column="message"  property="mess" />
+        <result column="dateTime"  property="hisTime" />
+    </resultMap>
+    <insert id="insert">
+        insert into x_chat(userId,toUserId,message,dateTime) values(#{userId},#{toUserId},#{message},now())
+    </insert>
+    <update id="upState">
+        update  x_chat set status = #{c} where userId = #{a} and toUserId = #{b}
+    </update>
+    <select id="getHis" resultMap="baseMap">
+        select * from x_chat where userId = #{userId} and toUserId = #{toUserId} order by dateTime desc limit 0, 10
+    </select>
+</mapper>
